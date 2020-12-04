@@ -1,5 +1,5 @@
 Feminicide News Entity Server
-============================
+=============================
 
 A small server to support the Data Against Feminicide project. Specifically this supports a prototype browser extension
 that allows users to quickly highlight entities mentioned in a webpage they rae looking at. Technically, this exposes
@@ -28,28 +28,34 @@ Usage
 Just hit the homepage in a web browser to try out putting in a URL and getting all the entities. There are also
 endpoints it exposes for you to use as an API. See the code in `test/test_server.py` for examples.
 
-## API Endpoints
+### API Endpoints
 
 Every endpoint returns a dict like this:
 
 ```json
 {
-  "duration": 1234,  // the number of milliseconds the request too to complete on the server
-  "status": "ok",  // "ok" if it worked, "error" if it did not work
-  "version": "0.0.1",  // a semantically versioned number indicating the server version
-  "results": { ... }  // a dict of the results you requested
+  "duration": 123,
+  "status": "ok",
+  "version": "0.0.1", 
+  "results": { ... }  
 }
 ```
 
-### /entities/from-url
+ * duration: the number of milliseconds the request too to complete on the server
+ * status: "ok" if it worked, "error" if it did not work
+ * version: a semantically versioned number indicating the server version
+ * results: // a dict of the results you requested (potentially different for different endpoints)
+
+
+#### /entities/from-url
 
 POST a `url` and `language` to this endpoint and it returns JSON with all the entities it finds.
 
-### /entities/from-content
+#### /entities/from-content
 
 POST `text` and `language` content to this endpoint and it returns JSON with all the entities it finds.
 
-### /content/from-url
+#### /content/from-url
 
 POST a `url` to this endpoint and it returns just the extracted content from the HTML.
 
