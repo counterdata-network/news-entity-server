@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form name="entityForm" id="entityForm">
+    <div class="form-row">
+        <div class="col-md-8">
+            <input class="form-control" id="url" name="url" type="text" value="https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7" >
+        </div>
+        <div class="col-md-2">
+            <select id="language" class="form-control">
+                <option value="EN" selected>English</option>
+                <option value="ES">Spanish</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+           <button type="button" id="extract" class="btn btn-primary">Extract Entities</button>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div id="results"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page_scripts %}
+$(function(){
+  $("#extract").click(function(){
+    // show feedback while fetching results
+    $('#results').html('<div style="text-align:center;"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>');
+    // send url and language to server
+    $.post({
+      url: "/entities/from-url",
+      data: { url: $('#url').val(), language: $('#language').val() },
+    }).done(function(response){
+      // if server responds well then display JSON
+      console.log(response);
+      var responseStr = JSON.stringify(response, null, 2);
+      $('#results').html('<pre>'+responseStr+'</pre>');
+    }).fail(function() {
+      // if server failed show error msg
+      $('#results').html('<div class="alert alert-danger" role="alert">⚠️ Something went wrong</div>');
+    });
+  })
+});
+{% endblock %}

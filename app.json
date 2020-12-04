@@ -1,0 +1,7 @@
+{
+  "name": "Feminicide News Entity Server",
+  "description": "Exposes an http API endpoint that accepts URLs and returns entities in JSON",
+  "scripts": {
+    "postdeploy": "./install.sh"
+  }
+}

@@ -1,0 +1,12 @@
+body {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#results {
+  margin: 40px 0px;
+  background-color: #eeeeee;
+  padding: 20px;
+  font-size: 12px;
+  font-family: monospace;
+}

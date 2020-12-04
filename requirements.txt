@@ -1,0 +1,7 @@
+requests===2.25.0
+flask==1.1.2
+gunicorn==20.0.4
+python-dotenv==0.15.0
+spacy==2.3.4
+newspaper3k==0.2.8
+pytest==6.1.2
