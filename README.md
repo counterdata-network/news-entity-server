@@ -12,6 +12,7 @@ Developing
 
 ```
 pip install -r requirements.txt
+./install.sh
 ```
 
 ### Running Locally
