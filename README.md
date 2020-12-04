@@ -41,10 +41,10 @@ Every endpoint returns a dict like this:
 }
 ```
 
- * duration: the number of milliseconds the request too to complete on the server
- * status: "ok" if it worked, "error" if it did not work
- * version: a semantically versioned number indicating the server version
- * results: // a dict of the results you requested (potentially different for different endpoints)
+ * **duration**: the number of milliseconds the request too to complete on the server
+ * **status**: "ok" if it worked, "error" if it did not work
+ * **version**: a semantically versioned number indicating the server version
+ * **results**: a dict of the results you requested (potentially different for different endpoints)
 
 
 #### /entities/from-url
