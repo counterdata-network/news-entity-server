@@ -4,7 +4,7 @@ from flask import Flask, request, render_template
 
 import helpers.content as content
 import helpers.entities as entities
-from helpers.request import arguments_required, form_fields_required, api_method
+from helpers.request import form_fields_required, api_method
 
 # setup logging
 logging.basicConfig(level=logging.DEBUG,
