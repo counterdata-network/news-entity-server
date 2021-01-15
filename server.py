@@ -1,6 +1,9 @@
 import logging
+import os
 from dotenv import load_dotenv
 from flask import Flask, request, render_template
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 import helpers.content as content
 import helpers.entities as entities
@@ -14,6 +17,17 @@ logger.info("-------------------------------------------------------------------
 
 # load in config from local file or environment variables
 load_dotenv()
+
+SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging to Sentry
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[FlaskIntegration()],  # see https://docs.sentry.io/platforms/python/guides/flask/
+    )
+    sentry_sdk.capture_message("Initializing")
+    logger.info("SENTRY_DSN: {}".format(SENTRY_DSN))
+else:
+    logger.info("Not logging errors to Sentry")
 
 app = Flask(__name__)
 
