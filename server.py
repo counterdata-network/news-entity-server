@@ -37,12 +37,21 @@ def home():
     return render_template('home.html')
 
 
+def _parse_title_option(value: str):
+    try:
+        return int(value)
+    except:
+        return 0
+
+
 @app.route("/entities/from-url", methods=['POST'])
 @form_fields_required('url', 'language')
 @api_method
 def entities_from_url():
     article_info = content.from_url(request.form['url'])
-    return entities.from_text(article_info['text'], request.form['language'])
+    include_title = _parse_title_option(request.form.get('title', None))  # should be a 1 or a 0
+    article_text = article_info['title'] + " " + article_info['text'] if include_title else article_info['text']
+    return entities.from_text(article_text, request.form['language'])
 
 
 @app.route("/content/from-url", methods=['POST'])

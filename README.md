@@ -50,7 +50,8 @@ Every endpoint returns a dict like this:
 
 #### /entities/from-url
 
-POST a `url` and `language` to this endpoint and it returns JSON with all the entities it finds.
+POST a `url` and `language` to this endpoint and it returns JSON with all the entities it finds. 
+Add a `title` argument, set to 1 or 0, to optionally include the article title in the entity extraction.  
 
 #### /entities/from-content
 

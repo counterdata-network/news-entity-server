@@ -41,21 +41,26 @@ def test_entities_from_url_spanish(client):
 def test_entities_from_url_english(client):
     response = client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
     data = json.loads(response.data)
+    response_with_title = client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
+    data_with_title = json.loads(response_with_title.data)
     assert 'results' in data
     assert len(data['results']) > 0
     assert 'results' in data
     assert data['results'][0]['text'] == 'Pipa'
     assert data['results'][0]['type'] == 'ORG'
+    assert len(data['results']) < len(data_with_title['results'])
 
 
 def test_content_from_url(client):
-    response = client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
+    response = client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
     data = json.loads(response.data)
     assert 'results' in data
     assert 'url' in data['results']
     assert data['results']['url'] == ENGLISH_ARTICLE_URL
     assert 'text' in data['results']
     assert len(data['results']['text']) > 0
+    assert 'title' in data['results']
+    assert len(data['results']['title']) > 0
     assert 'publish_date' in data['results']
     assert data['results']['publish_date'] == 'Sun, 15 Nov 2020 12:40:17 GMT'
     assert 'authors' in data['results']

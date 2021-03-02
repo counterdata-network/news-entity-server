@@ -3,15 +3,25 @@
 {% block content %}
 
 <form name="entityForm" id="entityForm">
-    <div class="form-row">
-        <div class="col-md-8">
+    <div class="row">
+        <div class="col-md-12">
             <input class="form-control" id="url" name="url" type="text" value="https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7" >
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-2">
             <select id="language" class="form-control">
                 <option value="EN" selected>English</option>
                 <option value="ES">Spanish</option>
             </select>
+        </div>
+        <div class="col-md-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="title">
+              <label class="form-check-label" for="title">
+                Include title?
+              </label>
+            </div>
         </div>
         <div class="col-md-2">
            <button type="button" id="extract" class="btn btn-primary">Extract Entities</button>
@@ -35,7 +45,7 @@ $(function(){
     // send url and language to server
     $.post({
       url: "/entities/from-url",
-      data: { url: $('#url').val(), language: $('#language').val() },
+      data: { url: $('#url').val(), language: $('#language').val(), title: $('#title').val() },
     }).done(function(response){
       // if server responds well then display JSON
       console.log(response);
