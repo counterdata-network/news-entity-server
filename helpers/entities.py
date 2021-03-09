@@ -1,6 +1,8 @@
 import spacy
 
 from helpers import ENGLISH, SPANISH
+import helpers.custom.ages as ages
+import helpers.custom.dates as dates
 
 # lookup table that maps from language code to default spaCy NER model
 language_nlp_lookup = {
@@ -19,7 +21,11 @@ def from_text(text, language_code):
         raise UnknownLanguageException()
     nlp = language_nlp_lookup[language_code.lower()]
     doc = nlp(text)
-    return _entities_as_dict(doc)
+    entities = _entities_as_dict(doc)
+    # add in custom entity types we've added
+    entities.append(ages.extract_ages(text, language_code))
+    entities.append(dates.extract_dates(text, language_code))
+    return entities
 
 
 def _entities_as_dict(doc):
@@ -32,3 +38,4 @@ def _entities_as_dict(doc):
             'end_char': ent.end_char,
         })
     return entities
+

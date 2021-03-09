@@ -65,3 +65,4 @@ def test_content_from_url(client):
     assert data['results']['publish_date'] == 'Sun, 15 Nov 2020 12:40:17 GMT'
     assert 'authors' in data['results']
     assert len(data['results']['authors']) == 1
+
