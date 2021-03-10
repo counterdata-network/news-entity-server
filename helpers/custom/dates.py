@@ -12,7 +12,7 @@ SPANISH_DATE_WORDS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Ju
 
 
 def extract_dates(text, language_code):
-    if language_code is SPANISH:
+    if language_code.lower() == SPANISH:
         return _get_spanish_dates(text)
     return []
 

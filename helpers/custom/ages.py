@@ -14,9 +14,9 @@ def extract_ages(text, language_code):
     :param language_code: 'EN' or 'ES'
     :return: List of strings corresponding to ages contained in the text.
     """
-    if language_code is SPANISH:
+    if language_code.lower() == SPANISH:
         regexp = re.compile(r'[0-9]{2}\saños')
-    elif language_code is ENGLISH:
+    elif language_code.lower() == ENGLISH:
         regexp = re.compile(r'[0-9]{2}(?:\s|-)(?:years|year)(?:\s|-)(?:old)')
     else:
         regexp = None

@@ -3,9 +3,11 @@ import json
 
 from server import app
 from helpers import ENGLISH, SPANISH, VERSION
+from helpers.custom.dates import ENTITY_TYPE_C_DATE
 
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
+SPANISH_ARTICLE_URL_2 = 'https://www.notigape.com/el-papa-francisco-prepara-viaje-a-hungria-en-septiembre-/229666'
 
 
 @pytest.fixture
@@ -30,6 +32,12 @@ def test_api_metadata(client):
 
 
 def test_entities_from_url_spanish(client):
+    response = client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
+    data = json.loads(response.data)
+    assert 'results' in data
+    assert len(data['results']) > 18
+    assert data['results'][17]['text'] == 'septiembre'
+    assert data['results'][17]['type'] == ENTITY_TYPE_C_DATE
     response = client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
     data = json.loads(response.data)
     assert 'results' in data
@@ -65,4 +73,3 @@ def test_content_from_url(client):
     assert data['results']['publish_date'] == 'Sun, 15 Nov 2020 12:40:17 GMT'
     assert 'authors' in data['results']
     assert len(data['results']['authors']) == 1
-

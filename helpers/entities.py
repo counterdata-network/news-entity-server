@@ -23,8 +23,8 @@ def from_text(text, language_code):
     doc = nlp(text)
     entities = _entities_as_dict(doc)
     # add in custom entity types we've added
-    entities.append(ages.extract_ages(text, language_code))
-    entities.append(dates.extract_dates(text, language_code))
+    entities += ages.extract_ages(text, language_code)
+    entities += dates.extract_dates(text, language_code)
     return entities
 
 

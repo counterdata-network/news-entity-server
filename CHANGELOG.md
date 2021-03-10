@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.1.1
+
+Fix bugs in integration of new date and age extraction code, add more test cases for those too
+
 ### v1.1.0
 
 Added custom age and date extraction code to support story clustering experiments
