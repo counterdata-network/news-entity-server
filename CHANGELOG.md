@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.1.2
+
+Fixed spanish date regex
+
 ### v1.1.1
 
 Fix bugs in integration of new date and age extraction code, add more test cases for those too

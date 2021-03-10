@@ -6,8 +6,9 @@ from helpers.custom import matches_as_entities
 ENTITY_TYPE_C_DATE = "C_DATE"
 
 SPANISH_DATE_WORDS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
-                      'Octubre', 'Noviembre', 'Diciembre', 'Ene.', 'Feb.',
-                      r'Mar\.', r'Abr\.', r'Jun\.', r'Jul\.', r'Ago\.', r'Sep\.', r'Oct\.', r'Nov\.', r'Dic\.',
+                      'Octubre', 'Noviembre', 'Diciembre',
+                      r'Ene\.', r'Feb\.', r'Mar\.', r'Abr\.', r'Jun\.', r'Jul\.', r'Ago\.', r'Sep\.',
+                      r'Oct\.', r'Nov\.', r'Dic\.',
                       'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
 
 
