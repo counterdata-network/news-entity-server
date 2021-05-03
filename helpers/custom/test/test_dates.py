@@ -1,3 +1,4 @@
+import unittest
 import helpers.custom.dates as dates
 from helpers import SPANISH, ENGLISH
 
@@ -11,20 +12,23 @@ test_string_es_2 = """BUDAPEST, Hungría —  BUDAPEST, Hungría (AP) — El pap
     acuerdo con el cardenal de la Iglesia católica del país europeo."""
 
 
-def test_extract_dates_es():
-    results = dates.extract_dates(test_string_es_2, SPANISH)
-    assert len(results) == 1
-    assert results[0]['text'] == 'septiembre'
-    results = dates.extract_dates(test_string_es, SPANISH)
-    assert len(results) == 13
-    assert results[0]['text'] == 'marzo'
-    assert results[12]['text'] == '8/3/21'
+class TestCustomDateExtraction(unittest.TestCase):
 
+    def test_extract_dates_es_short(self):
+        results = dates.extract_dates(test_string_es_2, SPANISH)
+        assert len(results) == 1
+        assert results[0]['text'] == 'septiembre'
 
-def test_extract_dates_en():
-    results = dates.extract_dates("This happend on 8/3/21", ENGLISH)
-    assert len(results) == 0
+    def test_extract_dates_es_long(self):
+        results = dates.extract_dates(test_string_es, SPANISH)
+        assert len(results) == 12
+        assert results[0]['text'] == 'marzo'
+        assert results[11]['text'] == '8/3/21'
+
+    def test_extract_dates_en(self):
+        results = dates.extract_dates("This happend on 8/3/21", ENGLISH)
+        assert len(results) == 0
 
 
 if __name__ == "__main__":
-    test_extract_dates_es()
+    unittest.main()

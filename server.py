@@ -9,6 +9,7 @@ import helpers.content as content
 import helpers.entities as entities
 from helpers.request import form_fields_required, api_method
 
+
 # setup logging
 logging.basicConfig(level=logging.DEBUG,
                     format="[%(asctime)s][%(levelname)s] %(name)s %(filename)s:%(funcName)s:%(lineno)d | %(message)s")

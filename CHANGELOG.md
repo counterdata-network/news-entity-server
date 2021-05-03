@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.2.0
+
+Switch default extraction to readability, with a more robust set of fallback libraries. Clean up test code too. 
+
 ### v1.1.2
 
 Fixed spanish date regex

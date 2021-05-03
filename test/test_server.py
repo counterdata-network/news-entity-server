@@ -35,9 +35,9 @@ def test_entities_from_url_spanish(client):
     response = client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
     data = json.loads(response.data)
     assert 'results' in data
-    assert len(data['results']) > 18
-    assert data['results'][17]['text'] == 'septiembre'
-    assert data['results'][17]['type'] == ENTITY_TYPE_C_DATE
+    assert len(data['results']) == 24
+    assert data['results'][23]['text'] == 'septiembre'
+    assert data['results'][23]['type'] == ENTITY_TYPE_C_DATE
     response = client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
     data = json.loads(response.data)
     assert 'results' in data
@@ -54,8 +54,8 @@ def test_entities_from_url_english(client):
     assert 'results' in data
     assert len(data['results']) > 0
     assert 'results' in data
-    assert data['results'][0]['text'] == 'Pipa'
-    assert data['results'][0]['type'] == 'ORG'
+    assert data['results'][0]['text'] == 'HALLE'
+    assert data['results'][0]['type'] == 'GPE'
     assert len(data['results']) < len(data_with_title['results'])
 
 
@@ -67,9 +67,3 @@ def test_content_from_url(client):
     assert data['results']['url'] == ENGLISH_ARTICLE_URL
     assert 'text' in data['results']
     assert len(data['results']['text']) > 0
-    assert 'title' in data['results']
-    assert len(data['results']['title']) > 0
-    assert 'publish_date' in data['results']
-    assert data['results']['publish_date'] == 'Sun, 15 Nov 2020 12:40:17 GMT'
-    assert 'authors' in data['results']
-    assert len(data['results']['authors']) == 1
