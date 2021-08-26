@@ -5,6 +5,7 @@ from flask import Flask, request, render_template
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
+from helpers import VERSION
 import helpers.content as content
 import helpers.entities as entities
 from helpers.request import form_fields_required, api_method
@@ -21,12 +22,9 @@ load_dotenv()
 
 SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging to Sentry
 if SENTRY_DSN:
-    sentry_sdk.init(
-        dsn=SENTRY_DSN,
-        integrations=[FlaskIntegration()],  # see https://docs.sentry.io/platforms/python/guides/flask/
-    )
-    sentry_sdk.capture_message("Initializing")
-    logger.info("SENTRY_DSN: {}".format(SENTRY_DSN))
+    sentry_sdk.init(dsn=SENTRY_DSN, release=VERSION,
+                    integrations=[FlaskIntegration()])
+    logger.info("  SENTRY_DSN: {}".format(SENTRY_DSN))
 else:
     logger.info("Not logging errors to Sentry")
 
