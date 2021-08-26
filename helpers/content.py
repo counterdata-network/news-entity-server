@@ -12,6 +12,8 @@ import regex as re
 
 logger = logging.getLogger(__name__)
 
+MINUMUM_CONTENT_LENGTH = 200  # less than this and it doesn't count as working extraction (experimentally determined)
+
 METHOD_NEWSPAPER_3k = 'newspaper3k'
 METHOD_GOOSE_3 = 'goose3'
 METHOD_BEAUTIFUL_SOUP_4 = 'beautifulsoup4'
@@ -19,6 +21,12 @@ METHOD_BOILER_PIPE_3 = 'boilerpipe3'
 METHOD_DRAGNET = 'dragnet'
 METHOD_READABILITY = 'readability'
 METHOD_TRIFILATURA = 'trifilatura'
+
+
+def _default_headers() -> typing.Dict:
+    return {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
+    }
 
 
 def from_url(url: str) -> typing.Dict:
@@ -54,11 +62,11 @@ class AbstractExtractor(ABC):
         self.content = None
 
     @abstractmethod
-    def extract(self, url:str):
+    def extract(self, url: str):
         pass
 
     def worked(self) -> bool:
-        return (self.content is not None) and (len(self.content['text']) > 0)
+        return (self.content is not None) and (len(self.content['text']) > MINUMUM_CONTENT_LENGTH)
 
 
 def _extract(url: str, extract_implementation) -> AbstractExtractor:
@@ -136,13 +144,13 @@ class TrifilaturaExtractor(AbstractExtractor):
 class ReadabilityExtractor(AbstractExtractor):
 
     def extract(self, url: str):
-        response = requests.get(url)
+        response = requests.get(url, headers=_default_headers())
         if response.status_code != 200:
             return
         doc = readability.Document(response.text)
         self.content = {
             'url': url,
-            'text': re.sub('<[^<]+?>', '', doc.summary()), # need to remove any tags
+            'text': re.sub('<[^<]+?>', '', doc.summary()),  # need to remove any tags
             'title': doc.title(),
             'publish_date': None,
             'top_image_url': None,
@@ -154,14 +162,14 @@ class ReadabilityExtractor(AbstractExtractor):
 class RawHtmlExtractor(AbstractExtractor):
 
     def extract(self, url: str):
-        res = requests.get(url)
+        res = requests.get(url, headers=_default_headers())
         if res.status_code != 200:
             return
         html_page = res.content
         soup = BeautifulSoup(html_page, 'html.parser')
         text = soup.find_all(text=True)
         output = ''
-        blacklist = [
+        remove_list = [
             '[document]',
             'noscript',
             'header',
@@ -172,7 +180,7 @@ class RawHtmlExtractor(AbstractExtractor):
             'script',
         ]
         for t in text:
-            if t.parent.name not in blacklist:
+            if t.parent.name not in remove_list:
                 output += '{} '.format(t)
         self.content = {
             'url': url,

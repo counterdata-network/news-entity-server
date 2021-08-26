@@ -32,7 +32,7 @@ def _entities_as_dict(doc):
     entities = []
     for ent in doc.ents:
         entities.append({
-            'text': ent.text,
+            'text': ent.text.strip(),
             'type': ent.label_,
             'start_char': ent.start_char,
             'end_char': ent.end_char,
