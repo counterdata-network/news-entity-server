@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.2.1
+
+More check to make sure we don't parse non-html content. 
+
 ### v1.2.0
 
 Switch default extraction to readability, with a more robust set of fallback libraries. Clean up test code too. 
