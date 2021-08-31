@@ -161,9 +161,21 @@ class ReadabilityExtractor(AbstractExtractor):
 
 class RawHtmlExtractor(AbstractExtractor):
 
+    def __init__(self):
+        super(RawHtmlExtractor, self).__init__()
+        self.is_html = None
+
+    def worked(self) -> bool:
+        if self.is_html:
+            return super().worked()
+        return False
+
     def extract(self, url: str):
         res = requests.get(url, headers=_default_headers())
         if res.status_code != 200:
+            return
+        if "text/html" not in res.headers["content-type"]:
+            self.is_html = False
             return
         html_page = res.content
         soup = BeautifulSoup(html_page, 'html.parser')

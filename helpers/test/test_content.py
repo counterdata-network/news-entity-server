@@ -12,6 +12,14 @@ class TestContentFromUrl(unittest.TestCase):
         assert results['extraction_method'] == expected_method
         return results
 
+    def test_failing_url(self):
+        url = "https://s3.amazonaws.com/CFSV2/obituaries/photos/4736/635311/5fecf89b1a6fb.jpeg"
+        try:
+            results = content.from_url(url)
+        except RuntimeError:
+            # this is an image, so it should return nothing
+            assert True
+
     def test_lanacion(self):
         url = 'https://www.lanacion.com.ar/seguridad/cordoba-en-marzo-asesinaron-a-tres-mujeres-nid1884942/'
         results = self._fetch_and_validate(url, content.METHOD_BOILER_PIPE_3)
