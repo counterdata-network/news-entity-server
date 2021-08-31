@@ -13,9 +13,17 @@ class TestContentFromUrl(unittest.TestCase):
         return results
 
     def test_failing_url(self):
+        url = "chrome://newtab/"
+        try:
+            self._fetch_and_validate(url, None)
+        except RuntimeError:
+            # this is an image, so it should return nothing
+            assert True
+
+    def test_not_html(self):
         url = "https://s3.amazonaws.com/CFSV2/obituaries/photos/4736/635311/5fecf89b1a6fb.jpeg"
         try:
-            results = content.from_url(url)
+            self._fetch_and_validate(url, None)
         except RuntimeError:
             # this is an image, so it should return nothing
             assert True
