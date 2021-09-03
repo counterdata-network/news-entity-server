@@ -12,6 +12,7 @@ class TestContentFromUrl(unittest.TestCase):
         assert results['extraction_method'] == expected_method
         return results
 
+
     def test_failing_url(self):
         url = "chrome://newtab/"
         try:
@@ -30,7 +31,7 @@ class TestContentFromUrl(unittest.TestCase):
 
     def test_lanacion(self):
         url = 'https://www.lanacion.com.ar/seguridad/cordoba-en-marzo-asesinaron-a-tres-mujeres-nid1884942/'
-        results = self._fetch_and_validate(url, content.METHOD_BOILER_PIPE_3)
+        results = self._fetch_and_validate(url, content.METHOD_NEWSPAPER_3k)
         assert "Cuando llegaron los agentes encontraron a la mujer en el dormitorio" in results['text']
 
     def test_cnn(self):
@@ -45,7 +46,7 @@ class TestContentFromUrl(unittest.TestCase):
 
     def test_from_url_página_12(self):
         url = "https://www.pagina12.com.ar/338796-coronavirus-en-argentina-se-registraron-26-053-casos-y-561-m"
-        results = self._fetch_and_validate(url, content.METHOD_READABILITY)
+        results = self._fetch_and_validate(url, content.METHOD_TRIFILATURA)
         assert "Por otro lado, fueron realizados en el día 84.085 tests" in results['text']
 
     def test_from_url_ahora_noticias(self):

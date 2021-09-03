@@ -1,6 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
-from newspaper import Article
+import configparser
+import newspaper
 from goose3 import Goose
 import typing
 import requests
@@ -14,6 +15,9 @@ logger = logging.getLogger(__name__)
 
 MINUMUM_CONTENT_LENGTH = 200  # less than this and it doesn't count as working extraction (experimentally determined)
 
+# wait only this many seconds for a server to respond with content. important to keep in sync with central server
+DEFAULT_TIMEOUT_SECS = 3
+
 METHOD_NEWSPAPER_3k = 'newspaper3k'
 METHOD_GOOSE_3 = 'goose3'
 METHOD_BEAUTIFUL_SOUP_4 = 'beautifulsoup4'
@@ -21,12 +25,6 @@ METHOD_BOILER_PIPE_3 = 'boilerpipe3'
 METHOD_DRAGNET = 'dragnet'
 METHOD_READABILITY = 'readability'
 METHOD_TRIFILATURA = 'trifilatura'
-
-
-def _default_headers() -> typing.Dict:
-    return {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'
-    }
 
 
 def from_url(url: str) -> typing.Dict:
@@ -39,7 +37,7 @@ def from_url(url: str) -> typing.Dict:
     """
     order = [  # based by findings from trifilatura paper, but customized to performance on EN and ES sources (see test)
         ReadabilityExtractor,
-        TrifilaturaExtractor,
+        TrafilaturaExtractor,
         BoilerPipe3Extractor,
         GooseExtractor,
         Newspaper3kExtractor,
@@ -60,6 +58,17 @@ class AbstractExtractor(ABC):
 
     def __init__(self):
         self.content = None
+        self.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0) Gecko/20100101 Firefox/78.0'
+        self.timeout_secs = DEFAULT_TIMEOUT_SECS
+
+    def _fetch_content_via_requests(self, url):
+        response = requests.get(url, headers={'User-Agent': self.user_agent}, timeout=self.timeout_secs)
+        if response.status_code != 200:
+            raise RuntimeError("Webpage didn't return content ({}) from {}".format(response.status_code, url))
+        if "text/html" not in response.headers["content-type"]:
+            raise RuntimeError("Webpage didn't return html content ({}) from {}".format(
+                response.headers["content-type"], url))
+        return response.text
 
     @abstractmethod
     def extract(self, url: str):
@@ -78,7 +87,10 @@ def _extract(url: str, extract_implementation) -> AbstractExtractor:
 class Newspaper3kExtractor(AbstractExtractor):
 
     def extract(self, url):
-        doc = Article(url)
+        config = newspaper.Config()
+        config.browser_user_agent = self.user_agent
+        config.request_timeout = self.timeout_secs
+        doc = newspaper.Article(url)
         doc.download()
         doc.parse()
         self.content = {
@@ -95,8 +107,9 @@ class Newspaper3kExtractor(AbstractExtractor):
 class GooseExtractor(AbstractExtractor):
 
     def extract(self, url):
-        g = Goose({'browser_user_agent': 'Mozilla'})
-        g3_article = g.extract(url=url)
+        html_text = self._fetch_content_via_requests(url)
+        g = Goose()
+        g3_article = g.raw_html(html_text)
         self.content = {
             'url': url,
             'text': g3_article.cleaned_text,
@@ -112,7 +125,8 @@ class BoilerPipe3Extractor(AbstractExtractor):
 
     def extract(self, url: str):
         extractor = bp3_extractors.ArticleExtractor()
-        bp_doc = extractor.get_doc_from_url(url)
+        html_text = self._fetch_content_via_requests(url)
+        bp_doc = extractor.get_content(html_text)
         self.content = {
             'url': url,
             'text': bp_doc.content,
@@ -124,12 +138,14 @@ class BoilerPipe3Extractor(AbstractExtractor):
         }
 
 
-class TrifilaturaExtractor(AbstractExtractor):
+class TrafilaturaExtractor(AbstractExtractor):
 
     def extract(self, url: str):
-        downloaded = trafilatura.fetch_url(url)
+        config = configparser.ConfigParser()
+        config['[DEFAULT]'] = dict(USER_AGENTS=self.user_agent,)
+        html_text = self._fetch_content_via_requests(url)
         # don't fallback to readability/justext because we have our own hierarchy of things to try
-        text = trafilatura.extract(downloaded, no_fallback=True)
+        text = trafilatura.extract(html_text, no_fallback=True)
         self.content = {
             'url': url,
             'text': text,
@@ -144,10 +160,8 @@ class TrifilaturaExtractor(AbstractExtractor):
 class ReadabilityExtractor(AbstractExtractor):
 
     def extract(self, url: str):
-        response = requests.get(url, headers=_default_headers())
-        if response.status_code != 200:
-            return
-        doc = readability.Document(response.text)
+        html_text = self._fetch_content_via_requests(url)
+        doc = readability.Document(html_text)
         self.content = {
             'url': url,
             'text': re.sub('<[^<]+?>', '', doc.summary()),  # need to remove any tags
@@ -171,14 +185,8 @@ class RawHtmlExtractor(AbstractExtractor):
         return False
 
     def extract(self, url: str):
-        res = requests.get(url, headers=_default_headers())
-        if res.status_code != 200:
-            return
-        if "text/html" not in res.headers["content-type"]:
-            self.is_html = False
-            return
-        html_page = res.content
-        soup = BeautifulSoup(html_page, 'html.parser')
+        html_text = self._fetch_content_via_requests(url)
+        soup = BeautifulSoup(html_text, 'html.parser')
         text = soup.find_all(text=True)
         output = ''
         remove_list = [

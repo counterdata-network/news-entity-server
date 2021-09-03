@@ -1,13 +1,14 @@
 import spacy
 
-from helpers import ENGLISH, SPANISH
+from helpers import ENGLISH, SPANISH, PORTUGUESE
 import helpers.custom.ages as ages
 import helpers.custom.dates as dates
 
 # lookup table that maps from language code to default spaCy NER model
 language_nlp_lookup = {
     ENGLISH: spacy.load("en_core_web_lg"),
-    SPANISH: spacy.load("es_core_news_lg")
+    SPANISH: spacy.load("es_core_news_lg"),
+    PORTUGUESE: spacy.load("pt_core_news_lg")
 }
 
 

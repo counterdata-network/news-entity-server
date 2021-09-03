@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.3.0
+
+Add support for Portuguese parsing. Standardize request headers and timeouts.
+
 ### v1.2.1
 
 More check to make sure we don't parse non-html content. 
