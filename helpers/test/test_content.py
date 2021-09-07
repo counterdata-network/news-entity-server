@@ -12,12 +12,11 @@ class TestContentFromUrl(unittest.TestCase):
         assert results['extraction_method'] == expected_method
         return results
 
-
     def test_failing_url(self):
         url = "chrome://newtab/"
         try:
             self._fetch_and_validate(url, None)
-        except RuntimeError:
+        except Exception:
             # this is an image, so it should return nothing
             assert True
 
@@ -31,7 +30,7 @@ class TestContentFromUrl(unittest.TestCase):
 
     def test_lanacion(self):
         url = 'https://www.lanacion.com.ar/seguridad/cordoba-en-marzo-asesinaron-a-tres-mujeres-nid1884942/'
-        results = self._fetch_and_validate(url, content.METHOD_NEWSPAPER_3k)
+        results = self._fetch_and_validate(url, content.METHOD_BOILER_PIPE_3)
         assert "Cuando llegaron los agentes encontraron a la mujer en el dormitorio" in results['text']
 
     def test_cnn(self):
