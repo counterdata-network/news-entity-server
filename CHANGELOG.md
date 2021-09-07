@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.3.1
+
+Fetch HTML once *before* running extractors to save time.
+
 ### v1.3.0
 
 Add support for Portuguese parsing. Standardize request headers and timeouts.
