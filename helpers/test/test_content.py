@@ -8,7 +8,7 @@ class TestContentFromUrl(unittest.TestCase):
     def _fetch_and_validate(self, url: str, expected_method: str):
         results = content.from_url(url)
         assert results['url'] == url
-        assert len(results['text']) > content.MINUMUM_CONTENT_LENGTH
+        assert len(results['text']) > content.MINIMUM_CONTENT_LENGTH
         assert results['extraction_method'] == expected_method
         return results
 

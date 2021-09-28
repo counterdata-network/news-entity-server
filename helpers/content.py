@@ -14,7 +14,7 @@ from .exceptions import UnableToExtractError
 
 logger = logging.getLogger(__name__)
 
-MINUMUM_CONTENT_LENGTH = 200  # less than this and it doesn't count as working extraction (experimentally determined)
+MINIMUM_CONTENT_LENGTH = 200  # less than this and it doesn't count as working extraction (experimentally determined)
 
 # wait only this many seconds for a server to respond with content. important to keep in sync with central server
 DEFAULT_TIMEOUT_SECS = 3
@@ -82,7 +82,7 @@ class AbstractExtractor(ABC):
         pass
 
     def worked(self) -> bool:
-        return (self.content is not None) and (len(self.content['text']) > MINUMUM_CONTENT_LENGTH)
+        return (self.content is not None) and (len(self.content['text']) > MINIMUM_CONTENT_LENGTH)
 
 
 class Newspaper3kExtractor(AbstractExtractor):
