@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, request, render_template
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.logging import ignore_logger
 
 from helpers import VERSION
 import helpers.content as content
@@ -24,6 +25,7 @@ SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging 
 if SENTRY_DSN:
     sentry_sdk.init(dsn=SENTRY_DSN, release=VERSION,
                     integrations=[FlaskIntegration()])
+    ignore_logger("helpers.request")
     logger.info("  SENTRY_DSN: {}".format(SENTRY_DSN))
 else:
     logger.info("Not logging errors to Sentry")
@@ -49,7 +51,10 @@ def _parse_title_option(value: str):
 def entities_from_url():
     article_info = content.from_url(request.form['url'])
     include_title = _parse_title_option(request.form.get('title', None))  # should be a 1 or a 0
-    article_text = article_info['title'] + " " + article_info['text'] if include_title else article_info['text']
+    article_text = ""
+    if include_title and (article_info['title'] is not None):
+        article_text += article_info['title'] + " "
+    article_text += article_info['text']
     return entities.from_text(article_text, request.form['language'])
 
 

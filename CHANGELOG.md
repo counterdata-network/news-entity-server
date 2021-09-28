@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.3.2
+
+Reduce errors sent to central Sentry logging, because we don't care about ones we expect to happen.
+
 ### v1.3.1
 
 Fetch HTML once *before* running extractors to save time.

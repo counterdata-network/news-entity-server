@@ -1,6 +1,5 @@
 import logging
 from abc import ABC, abstractmethod
-import configparser
 import newspaper
 from goose3 import Goose
 import typing
@@ -10,6 +9,8 @@ from boilerpy3 import extractors as bp3_extractors
 import readability
 import trafilatura
 import regex as re
+
+from .exceptions import UnableToExtractError
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ def from_url(url: str, user_agent: str = None, timeout: int = None) -> typing.Di
         except Exception as e:
             # if the extractor fails for any reason, just continue on to the next one
             pass
-    raise RuntimeError("Tried all the extractors and none worked!")
+    raise UnableToExtractError(url)
 
 
 class AbstractExtractor(ABC):

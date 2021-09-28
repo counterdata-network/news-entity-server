@@ -3,6 +3,9 @@ import time
 from functools import wraps
 from flask import jsonify, request
 from helpers import VERSION
+from requests.exceptions import SSLError, ReadTimeout
+
+from .exceptions import UnableToExtractError
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +98,15 @@ def api_method(func):
         try:
             results = func(*args, **kwargs)
             return _results_with_metadata(results, start)
+        # don't log certain exceptions, because they are expected and are too noisy on Sentry
+        except SSLError as se:
+            return _error_results(str(se), start)
+        except ReadTimeout as rt:
+            return _error_results(str(rt), start)
+        except UnableToExtractError as utee:
+            return _error_results(str(utee), start)
         except Exception as e:
+            # log other, unexpected, exceptions to Sentry
             logger.exception(e)
             return _error_results(str(e), start)
     return wrapper
