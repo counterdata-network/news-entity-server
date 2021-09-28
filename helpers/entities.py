@@ -5,16 +5,13 @@ import helpers.custom.ages as ages
 import helpers.custom.dates as dates
 
 # lookup table that maps from language code to default spaCy NER model
+from helpers.exceptions import UnknownLanguageException
+
 language_nlp_lookup = {
     ENGLISH: spacy.load("en_core_web_lg"),
     SPANISH: spacy.load("es_core_news_lg"),
     PORTUGUESE: spacy.load("pt_core_news_lg")
 }
-
-
-class UnknownLanguageException(Exception):
-    """Raised when the input language is invalid"""
-    pass
 
 
 def from_text(text, language_code):
