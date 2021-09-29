@@ -25,7 +25,12 @@ SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging 
 if SENTRY_DSN:
     sentry_sdk.init(dsn=SENTRY_DSN, release=VERSION,
                     integrations=[FlaskIntegration()])
+    # make sure some errors we don't care about don't make it to sentry
     ignore_logger("helpers.request")
+    ignore_logger("boilerpy3")
+    ignore_logger("trafilatura.utils")
+    ignore_logger("trafilatura.core")
+    ignore_logger("readability.readability")
     logger.info("  SENTRY_DSN: {}".format(SENTRY_DSN))
 else:
     logger.info("Not logging errors to Sentry")
