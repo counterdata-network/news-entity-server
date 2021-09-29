@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.3.3
+
+Tell Sentry to ignore some more low-level logging so it doesn't relay noisy erorrs to the server.
+
 ### v1.3.2
 
 Reduce errors sent to central Sentry logging, because we don't care about ones we expect to happen.
