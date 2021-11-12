@@ -1,6 +1,6 @@
 import spacy
 
-from helpers import ENGLISH, SPANISH, PORTUGUESE
+from helpers import ENGLISH, SPANISH, PORTUGUESE, FRENCH, GERMAN
 import helpers.custom.ages as ages
 import helpers.custom.dates as dates
 
@@ -10,7 +10,9 @@ from helpers.exceptions import UnknownLanguageException
 language_nlp_lookup = {
     ENGLISH: spacy.load("en_core_web_lg"),
     SPANISH: spacy.load("es_core_news_lg"),
-    PORTUGUESE: spacy.load("pt_core_news_lg")
+    PORTUGUESE: spacy.load("pt_core_news_lg"),
+    FRENCH: spacy.load("fr_core_news_sm"),
+    GERMAN: spacy.load("de_core_news_sm")
 }
 
 
