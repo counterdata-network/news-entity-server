@@ -1,4 +1,5 @@
 import spacy
+from typing import List, Dict
 
 from helpers import ENGLISH, SPANISH, PORTUGUESE, FRENCH, GERMAN
 import helpers.custom.ages as ages
@@ -16,7 +17,7 @@ language_nlp_lookup = {
 }
 
 
-def from_text(text, language_code):
+def from_text(text: str, language_code: str) -> List[Dict]:
     if language_code.lower() not in language_nlp_lookup.keys():
         raise UnknownLanguageException()
     nlp = language_nlp_lookup[language_code.lower()]
@@ -28,7 +29,7 @@ def from_text(text, language_code):
     return entities
 
 
-def _entities_as_dict(doc):
+def _entities_as_dict(doc) -> List[Dict]:
     entities = []
     for ent in doc.ents:
         entities.append({

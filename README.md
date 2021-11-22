@@ -1,9 +1,9 @@
-Feminicide News Entity Server
-=============================
+News Entity Server
+==================
 
-A small server to support the Data Against Feminicide project. Specifically this supports a prototype browser extension
-that allows users to quickly highlight entities mentioned in a webpage they rae looking at. Technically, this exposes
-an http API endpoint that accepts URLs and returns entities in JSON. Uses spaCy under the hood.
+A small API server to return entities found in online news. Originally built to support the 
+[Data Against Feminicide](https://datoscontrafeminicidio.net/) project. Technically, this exposes
+API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
 
 Developing
 ----------
@@ -26,8 +26,7 @@ Just run *pytest* to run a small set of test on the API endpoints.
 Usage
 -----
 
-Just hit the homepage in a web browser to try out putting in a URL and getting all the entities. There are also
-endpoints it exposes for you to use as an API. See the code in `test/test_server.py` for examples.
+API documentation is available at http://localhost:8000/redoc. See the code in `test/test_server.py` for examples.
 
 ### API Endpoints
 

@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.0
+
+Switch from Flask/gunicorn to FastAPI/uvicorn for speed and documentation.
+
 ### v1.3.3
 
 Tell Sentry to ignore some more low-level logging so it doesn't relay noisy erorrs to the server.

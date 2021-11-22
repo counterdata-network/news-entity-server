@@ -45,7 +45,7 @@ class TestContentFromUrl(unittest.TestCase):
 
     def test_from_url_página_12(self):
         url = "https://www.pagina12.com.ar/338796-coronavirus-en-argentina-se-registraron-26-053-casos-y-561-m"
-        results = self._fetch_and_validate(url, content.METHOD_READABILITY)
+        results = self._fetch_and_validate(url, content.METHOD_TRIFILATURA)
         assert "Por otro lado, fueron realizados en el día 84.085 tests" in results['text']
 
     def test_from_url_ahora_noticias(self):
