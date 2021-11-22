@@ -1,1 +1,1 @@
-web: gunicorn server:app --timeout 300
+web: uvicorn server:app --timeout-keep-alive 300

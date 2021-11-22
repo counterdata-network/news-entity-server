@@ -1,5 +1,5 @@
 import unittest
-import json
+from fastapi.testclient import TestClient
 
 from server import app
 from helpers import ENGLISH, SPANISH, VERSION
@@ -14,12 +14,11 @@ class TestServer(unittest.TestCase):
 
     def setUp(self) -> None:
         # This initializes the base client used by all the other tests
-        app.config['TESTING'] = True
-        self._client = app.test_client()
+        self._client = TestClient(app)
 
     def test_api_metadata(self):
         response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
-        data = json.loads(response.data)
+        data = response.json()
         assert 'status' in data
         assert data['status'] == 'ok'
         assert 'duration' in data
@@ -29,13 +28,13 @@ class TestServer(unittest.TestCase):
 
     def test_entities_from_url_spanish(self):
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
-        data = json.loads(response.data)
+        data = response.json()
         assert 'results' in data
-        assert len(data['results']) == 22
-        assert data['results'][21]['text'] == 'septiembre'
-        assert data['results'][21]['type'] == ENTITY_TYPE_C_DATE
+        assert len(data['results']) == 20
+        assert data['results'][19]['text'] == 'septiembre'
+        assert data['results'][19]['type'] == ENTITY_TYPE_C_DATE
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
-        data = json.loads(response.data)
+        data = response.json()
         assert 'results' in data
         assert len(data['results']) > 0
         assert data['results'][0]['text'] == 'EE UU'
@@ -43,19 +42,20 @@ class TestServer(unittest.TestCase):
 
     def test_entities_from_url_english(self):
         response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
-        data = json.loads(response.data)
-        response_with_title = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
-        data_with_title = json.loads(response_with_title.data)
+        data = response.json()
+        response_with_title = self._client.post('/entities/from-url',
+                                                data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
+        data_with_title = response_with_title.json()
         assert 'results' in data
         assert len(data['results']) > 0
         assert 'results' in data
         assert data['results'][0]['text'] == 'HALLE'
-        assert data['results'][0]['type'] == 'GPE'
+        assert data['results'][0]['type'] == 'ORG'
         assert len(data['results']) < len(data_with_title['results'])
 
     def test_content_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
-        data = json.loads(response.data)
+        data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
         assert data['results']['url'] == ENGLISH_ARTICLE_URL

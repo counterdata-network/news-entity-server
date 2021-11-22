@@ -2,7 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 import newspaper
 from goose3 import Goose
-import typing
+from typing import Dict
 import requests
 from bs4 import BeautifulSoup
 from boilerpy3 import extractors as bp3_extractors
@@ -31,7 +31,7 @@ METHOD_READABILITY = 'readability'
 METHOD_TRIFILATURA = 'trifilatura'
 
 
-def from_url(url: str, user_agent: str = None, timeout: int = None) -> typing.Dict:
+def from_url(url: str, user_agent: str = None, timeout: int = None) -> Dict:
     """
     Try a series of extractors to pull content out of the HTML at a URL. The idea is to try as hard as can to get
     good content, but fallback to at least get something useful. The writeup at this site was very helpful:
