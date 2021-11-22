@@ -26,7 +26,7 @@ Just run *pytest* to run a small set of test on the API endpoints.
 Usage
 -----
 
-API documentation is available at http://localhost:8000/redoc. See the code in `test/test_server.py` for examples.
+API documentation is available at http://localhost:5000/redoc. See the code in `test/test_server.py` for examples.
 
 ### API Endpoints
 
