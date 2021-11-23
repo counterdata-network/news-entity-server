@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.1
+
+Add custom PT date/age entity recognition code.
+
 ### v1.4.0
 
 Switch from Flask/gunicorn to FastAPI/uvicorn for speed and documentation.
