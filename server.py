@@ -50,7 +50,7 @@ else:
     logger.info("Not logging errors to Sentry")
 
 
-def _as_api_results(data: Dict, start_time: int) -> Dict:
+def _as_api_results(data: Dict, start_time: float) -> Dict:
     return {
         'version': helpers.VERSION,
         'status': 'ok',
