@@ -1,1 +1,1 @@
-web: uvicorn server:app --timeout-keep-alive 300 --port 5000
+web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker server:app --timeout 300
