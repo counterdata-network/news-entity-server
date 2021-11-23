@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from helpers import SPANISH, ENGLISH, PORTUGUESE
 from helpers.custom import matches_as_entities
@@ -6,7 +7,7 @@ from helpers.custom import matches_as_entities
 ENTITY_TYPE_C_AGE = "C_AGE"
 
 
-def extract_ages(text, language_code):
+def extract_ages(text: str, language_code: str) -> List:
     """
     Function to pull out ages from article text. It gets ages of the form "x(x) años" for Spanish, 
     "x(x) anos" for Portuguese, and "x(x)(-)year(s)(-)old" for English.

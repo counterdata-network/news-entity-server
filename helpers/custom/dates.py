@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from helpers import SPANISH, PORTUGUESE
 from helpers.custom import matches_as_entities
@@ -17,12 +18,14 @@ PORTUGUESE_DATE_WORDS = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Jun
                          r'Nov\.', r'Dez\.', 
                          'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
 
-def extract_dates(text, language_code):
+
+def extract_dates(text: str, language_code:str) -> List:
     if language_code.lower() == SPANISH or language_code.lower() == PORTUGUESE:
         return _get_dates_custom(text, language_code)
     return []
 
-def _get_dates_custom(article_text, language_code):
+
+def _get_dates_custom(article_text: str, language_code: str) -> List:
     """
     Function to pull out ages from article text. It gets strings corresponding to Spanish or Portuguese days of the week
     and months (including month abbreviations), or strings of the form dd/dd/dd (slashes may be replaced
@@ -35,7 +38,8 @@ def _get_dates_custom(article_text, language_code):
         custom_date_words = SPANISH_DATE_WORDS
     elif language_code.lower() == PORTUGUESE: 
         custom_date_words = PORTUGUESE_DATE_WORDS
-    else: return []
+    else:
+        return []
 
     for word in custom_date_words:
         found = matches_as_entities(word, article_text, ENTITY_TYPE_C_DATE, flags=re.IGNORECASE)
