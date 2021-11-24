@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.2
+
+Add back in suppression of error messages we don't care about logging (ie. ones like timeouts that are expected errors).
+
 ### v1.4.1
 
 Add custom PT date/age entity recognition code.
