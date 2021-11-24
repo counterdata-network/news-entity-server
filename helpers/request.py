@@ -1,6 +1,6 @@
 import time
 from functools import wraps
-from requests.exceptions import SSLError, ReadTimeout, TooManyRedirects
+from requests.exceptions import SSLError, ReadTimeout, TooManyRedirects, ConnectionError, RequestException
 import logging
 
 import helpers
@@ -47,6 +47,7 @@ def api_method(func):
             }
         # don't log certain exceptions, because they are expected and are too noisy on Sentry
         except SSLError as se:
+            # this is a subclass of ConnectionError, but good to catch it so we have a more detailed error message
             return _error_results(str(se), start_time)
         except TooManyRedirects as tmr:
             return _error_results(str(tmr), start_time)
@@ -54,6 +55,12 @@ def api_method(func):
             return _error_results(str(rt), start_time)
         except UnableToExtractError as utee:
             return _error_results(str(utee), start_time)
+        except ConnectionError as ce:
+            return _error_results(str(ce), start_time)
+        except RequestException as rexc:
+            return _error_results(str(rexc), start_time)
+        except ValueError as ve:
+            return _error_results(str(ve), start_time)
         except Exception as e:
             # log other, unexpected, exceptions to Sentry
             logger.exception(e)
