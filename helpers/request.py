@@ -1,0 +1,59 @@
+import time
+from functools import wraps
+from requests.exceptions import SSLError, ReadTimeout
+import logging
+
+import helpers
+from helpers.exceptions import UnableToExtractError
+
+logger = logging.getLogger(__name__)
+
+
+def _duration(start_time):
+    return int(round((time.time() - start_time) * 1000)) if start_time else 0
+
+
+def _error_results(message, start_time, status_code=400):
+    """
+    Central handler for returning error messages.
+    :param message:
+    :param start_time:
+    :param status_code:
+    :return:
+    """
+    return {
+        'status': 'error',
+        'statusCode': status_code,
+        'duration': _duration(start_time),
+        'message': message,
+    }
+
+
+def api_method(func):
+    """
+    Helper to add metadata to every api method. Use this in server.py and it will add stuff like the
+    version to the response. Plug it handles errors in one place, and supresses ones we don't care to log to Sentry.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        try:
+            results = func(*args, **kwargs)
+            return {
+                'version': helpers.VERSION,
+                'status': 'ok',
+                'duration': _duration(start_time),
+                'results': results
+            }
+        # don't log certain exceptions, because they are expected and are too noisy on Sentry
+        except SSLError as se:
+            return _error_results(str(se), start_time)
+        except ReadTimeout as rt:
+            return _error_results(str(rt), start_time)
+        except UnableToExtractError as utee:
+            return _error_results(str(utee), start_time)
+        except Exception as e:
+            # log other, unexpected, exceptions to Sentry
+            logger.exception(e)
+            return _error_results(str(e), start_time)
+    return wrapper

@@ -16,6 +16,13 @@ class TestServer(unittest.TestCase):
         # This initializes the base client used by all the other tests
         self._client = TestClient(app)
 
+    def test_bad_url(self):
+        url = "https://mystupiddomain.doesnotexist"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))
+        data = response.json()
+        assert data['status'] == 'error'
+        assert data['statusCode'] == 400
+
     def test_api_metadata(self):
         response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
         data = response.json()

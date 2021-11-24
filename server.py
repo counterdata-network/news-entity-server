@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
-from typing import Optional, Dict
-import time
+from typing import Optional
 
 import helpers
 import helpers.content as content
 import helpers.entities as entities
+from helpers.request import api_method
 
 from fastapi import FastAPI, Form
 
@@ -35,11 +35,11 @@ SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging 
 if SENTRY_DSN:
     sentry_sdk.init(dsn=SENTRY_DSN, release=helpers.VERSION)
     # make sure some errors we don't care about don't make it to sentry
-    ignore_logger("helpers.request")
     ignore_logger("boilerpy3")
     ignore_logger("trafilatura.utils")
     ignore_logger("trafilatura.core")
     ignore_logger("readability.readability")
+
     logger.info("  SENTRY_DSN: {}".format(SENTRY_DSN))
     try:
         app.add_middleware(SentryAsgiMiddleware)
@@ -50,35 +50,26 @@ else:
     logger.info("Not logging errors to Sentry")
 
 
-def _as_api_results(data: Dict, start_time: float) -> Dict:
-    return {
-        'version': helpers.VERSION,
-        'status': 'ok',
-        'duration': int(round((time.time() - start_time) * 1000)),
-        'results': data
-    }
-
-
 @app.get("/version")
+@api_method
 def version():
-    start_time = time.time()
-    return _as_api_results({}, start_time)
+    return {}
 
 
 @app.get("/languages")
+@api_method
 def supported_languages():
-    start_time = time.time()
-    return _as_api_results(helpers.LANGUAGES, start_time)
+    return helpers.LANGUAGES
 
 
 @app.post("/entities/from-url")
+@api_method
 def entities_from_url(url: str = Form(..., description="A publicly accessible web url of a news story."),
                       language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
                       title: Optional[int] = Form(None, description="Optional 1 or 0 indicating if the title should be prefixed the content before checking for entities.",)):
     """
     Return all the entities found in content extracted from the URL.
     """
-    start_time = time.time()
     article_info = content.from_url(url)
     include_title = title == 1 if title is not None else False
     article_text = ""
@@ -86,26 +77,24 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
         article_text += article_info['title'] + " "
     article_text += article_info['text']
     data = entities.from_text(article_text, language)
-    return _as_api_results(data, start_time)
+    return data
 
 
 @app.post("/content/from-url")
+@api_method
 def content_from_url(url: str = Form(..., description="A publicly accessible web url of a news story.")):
     """
     Return the content found at the URL. This uses a fallback mechanism to iterate through a list of 3rd party content
     extractors. It will try each until it finds one that succeeds.
     """
-    start_time = time.time()
-    data = content.from_url(url)
-    return _as_api_results(data, start_time)
+    return content.from_url(url)
 
 
 @app.post("/entities/from-content")
+@api_method
 def entities_from_content(text: str = Form(..., description="Raw text to check for entities."),
                           language: str = Form(..., description="One of the supported two-letter language codes.", length=2)):
     """
     Return all the entities found in content passed in.
     """
-    start_time = time.time()
-    data = entities.from_text(text, language)
-    return _as_api_results(data, start_time)
+    return entities.from_text(text, language)
