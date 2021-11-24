@@ -16,6 +16,13 @@ class TestServer(unittest.TestCase):
         # This initializes the base client used by all the other tests
         self._client = TestClient(app)
 
+    def test_too_many_redirects(self):
+        url = "https://mepublic.tarrantcounty.com/default.aspx?AspxAutoDetectCookieSupport=1"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))
+        data = response.json()
+        assert data['status'] == 'error'
+        assert data['statusCode'] == 400
+
     def test_bad_url(self):
         url = "https://mystupiddomain.doesnotexist"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))

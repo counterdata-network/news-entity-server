@@ -1,6 +1,6 @@
 import time
 from functools import wraps
-from requests.exceptions import SSLError, ReadTimeout
+from requests.exceptions import SSLError, ReadTimeout, TooManyRedirects
 import logging
 
 import helpers
@@ -48,6 +48,8 @@ def api_method(func):
         # don't log certain exceptions, because they are expected and are too noisy on Sentry
         except SSLError as se:
             return _error_results(str(se), start_time)
+        except TooManyRedirects as tmr:
+            return _error_results(str(tmr), start_time)
         except ReadTimeout as rt:
             return _error_results(str(rt), start_time)
         except UnableToExtractError as utee:
