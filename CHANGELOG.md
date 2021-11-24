@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.4
+
+Ignore some more can't-fetch-webpage errors.
+
 ### v1.4.3
 
 Ignore some more can't-fetch-webpage errors.
