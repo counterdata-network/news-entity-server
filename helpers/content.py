@@ -47,7 +47,7 @@ def from_url(url: str, user_agent: str = None, timeout: int = None) -> Dict:
     response = requests.get(url, headers={'User-Agent': custom_user_agent}, timeout=custom_timeout)
     if response.status_code != 200:
         raise RuntimeError("Webpage didn't return content ({}) from {}".format(response.status_code, url))
-    if "text/html" not in response.headers["content-type"]:
+    if ("content-type" in response.headers) and ("text/html" not in response.headers["content-type"]):
         raise RuntimeError("Webpage didn't return html content ({}) from {}".format(
             response.headers["content-type"], url))
     html_text = response.text
