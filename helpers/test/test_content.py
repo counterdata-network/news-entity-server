@@ -48,11 +48,14 @@ class TestContentFromUrl(unittest.TestCase):
         results = self._fetch_and_validate(url, content.METHOD_TRIFILATURA)
         assert "Por otro lado, fueron realizados en el día 84.085 tests" in results['text']
 
+
+'''
+    # disabled because it doesn't seem to exist anymore
     def test_from_url_ahora_noticias(self):
         url = "https://www.ahoranoticias.com.uy/2021/03/son-falsas-las-afirmaciones-de-la-inmunologa-roxana-bruno-integrante-de-la-agrupacion-epidemiologos-argentinos/"
         results = self._fetch_and_validate(url, content.METHOD_READABILITY)
         assert "Sobre el final de la entrevista Bruno mencionó a distintas" in results['text']
-
+'''
 
 if __name__ == "__main__":
     unittest.main()
