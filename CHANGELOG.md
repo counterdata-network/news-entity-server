@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.5
+
+Protect against missing content-type in fetched response.
+
 ### v1.4.4
 
 Ignore some more can't-fetch-webpage errors.
