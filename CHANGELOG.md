@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.4.6
+
+Update dependencies.
+
 ### v1.4.5
 
 Protect against missing content-type in fetched response.
