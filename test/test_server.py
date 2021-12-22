@@ -2,7 +2,7 @@ import unittest
 from fastapi.testclient import TestClient
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, GERMAN
 from helpers.custom.dates import ENTITY_TYPE_C_DATE
 
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
@@ -66,6 +66,13 @@ class TestServer(unittest.TestCase):
         assert data['results'][0]['text'] == 'HALLE'
         assert data['results'][0]['type'] == 'ORG'
         assert len(data['results']) < len(data_with_title['results'])
+
+    def test_entities_from_url_french(self):
+        url = "https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php?utm_source=rss_telegramme&utm_medium=rss&utm_campaign=rss&xtor=RSS-20"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH))
+        data = response.json()
+        assert 'results' in data
+        assert len(data['results']) == 229
 
     def test_content_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
