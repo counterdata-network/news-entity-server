@@ -1,6 +1,5 @@
 import logging
 import os
-from dotenv import load_dotenv
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
@@ -12,15 +11,6 @@ import helpers.entities as entities
 from helpers.request import api_method
 
 from fastapi import FastAPI, Form
-
-# setup logging
-logging.basicConfig(level=logging.INFO,
-                    format="[%(asctime)s][%(levelname)s] %(name)s %(filename)s:%(funcName)s:%(lineno)d | %(message)s")
-logger = logging.getLogger(__name__)
-logger.info("---------------------------------------------------------------------------")
-
-# load in config from local file or environment variables
-load_dotenv()
 
 app = FastAPI(
     title="News Entity Server",
