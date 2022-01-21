@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 logger.info("---------------------------------------------------------------------------")
 
-MODEL_MODE = os.environ.get('MODEL_MODE', None)
+MODEL_MODE = os.environ.get('MODEL_MODE', MODEL_MODE_EFFICIENCY)
 if MODEL_MODE not in MODEL_MODES:
     sys.exit("invalid model mode - must be one of [{}]".format(", ".join(MODEL_MODES)))
 logger.info("Starting {}, with '{}' models".format(VERSION, MODEL_MODE))

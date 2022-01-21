@@ -8,12 +8,15 @@ from helpers.exceptions import UnableToExtractError
 
 logger = logging.getLogger(__name__)
 
+STATUS_OK = 'ok'
+STATUS_ERROR = 'error'
 
-def _duration(start_time):
+
+def _duration(start_time: float):
     return int(round((time.time() - start_time) * 1000)) if start_time else 0
 
 
-def _error_results(message, start_time, status_code=400):
+def _error_results(message: str, start_time: float, status_code: int = 400):
     """
     Central handler for returning error messages.
     :param message:
@@ -22,10 +25,11 @@ def _error_results(message, start_time, status_code=400):
     :return:
     """
     return {
-        'status': 'error',
+        'status': STATUS_ERROR,
         'statusCode': status_code,
         'duration': _duration(start_time),
         'message': message,
+        'modelNode': helpers.MODEL_MODE
     }
 
 
@@ -41,7 +45,7 @@ def api_method(func):
             results = func(*args, **kwargs)
             return {
                 'version': helpers.VERSION,
-                'status': 'ok',
+                'status': STATUS_OK,
                 'duration': _duration(start_time),
                 'results': results
             }
