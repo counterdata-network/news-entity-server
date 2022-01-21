@@ -29,7 +29,7 @@ def _error_results(message: str, start_time: float, status_code: int = 400):
         'statusCode': status_code,
         'duration': _duration(start_time),
         'message': message,
-        'modelNode': helpers.MODEL_MODE
+        'modelMode': helpers.MODEL_MODE
     }
 
 
@@ -47,7 +47,8 @@ def api_method(func):
                 'version': helpers.VERSION,
                 'status': STATUS_OK,
                 'duration': _duration(start_time),
-                'results': results
+                'results': results,
+                'modelMode': helpers.MODEL_MODE
             }
         # don't log certain exceptions, because they are expected and are too noisy on Sentry
         except SSLError as se:

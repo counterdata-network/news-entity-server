@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.5.1
+
+Add model mode to returned results.
+
 ### v1.5.0
 
 Add new MODEL_MODE to pick between models for each language: "efficiency" (default) or "accuracy".
