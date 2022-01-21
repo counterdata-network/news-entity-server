@@ -12,6 +12,8 @@ from helpers.request import api_method
 
 from fastapi import FastAPI, Form
 
+logger = logging.getLogger(__name__)
+
 app = FastAPI(
     title="News Entity Server",
     description="Extract entities from online news in multiple langauges",
