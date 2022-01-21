@@ -17,7 +17,7 @@ MODEL_MODES = [MODEL_MODE_EFFICIENCY, MODEL_MODE_ACCURACY]
 
 load_dotenv()
 
-VERSION = '1.5.0'
+VERSION = '1.5.1'
 
 # setup logging
 logging.basicConfig(level=logging.INFO,
