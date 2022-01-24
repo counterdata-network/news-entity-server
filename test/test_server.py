@@ -44,8 +44,8 @@ class TestServer(unittest.TestCase):
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
         data = response.json()
         assert 'results' in data
-        assert len(data['results']) == 20
-        assert data['results'][19]['text'] == 'septiembre'
+        assert len(data['results']) == 22
+        assert data['results'][19]['text'] == 'marzo'
         assert data['results'][19]['type'] == ENTITY_TYPE_C_DATE
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
         data = response.json()
