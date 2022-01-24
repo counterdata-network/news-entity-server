@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.5.3
+
+Fix english large model mode box.
+
 ### v1.5.2
 
 More work on large model bug fixes.
