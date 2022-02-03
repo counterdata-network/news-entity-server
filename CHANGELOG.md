@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v1.6.0
+
+Better guessing for publish_date via `htmldate` module.
+
 ### v1.5.3
 
 Fix english large model mode box.
