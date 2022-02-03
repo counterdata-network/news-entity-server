@@ -12,3 +12,4 @@ trafilatura~=1.0.0
 fastapi[all]~=0.72.0
 uvicorn[standard]~=0.15.0  # hold back due to fastapi dependency
 gunicorn~=20.1.0
+htmldate~=1.0.0

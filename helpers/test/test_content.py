@@ -32,6 +32,7 @@ class TestContentFromUrl(unittest.TestCase):
         url = 'https://www.lanacion.com.ar/seguridad/cordoba-en-marzo-asesinaron-a-tres-mujeres-nid1884942/'
         results = self._fetch_and_validate(url, content.METHOD_BOILER_PIPE_3)
         assert "Cuando llegaron los agentes encontraron a la mujer en el dormitorio" in results['text']
+        assert "2016-03-31" == results['publish_date']
 
     def test_cnn(self):
         url = "https://www.cnn.com/2021/04/30/politics/mcconnell-1619-project-education-secretary/index.html"

@@ -9,6 +9,7 @@ from boilerpy3 import extractors as bp3_extractors
 import readability
 import trafilatura
 import regex as re
+import htmldate
 
 from .exceptions import UnableToExtractError
 
@@ -51,6 +52,8 @@ def from_url(url: str, user_agent: str = None, timeout: int = None) -> Dict:
         raise RuntimeError("Webpage didn't return html content ({}) from {}".format(
             response.headers["content-type"], url))
     html_text = response.text
+    # guess the date independently
+    pub_date_str = htmldate.find_date(html_text, url=url, original_date=True)
     # now try each extractor against the same HTML
     order = [  # based by findings from trifilatura paper, but customized to performance on EN and ES sources (see test)
         ReadabilityExtractor,
@@ -65,6 +68,7 @@ def from_url(url: str, user_agent: str = None, timeout: int = None) -> Dict:
             extractor = extractor_class()
             extractor.extract(url, html_text)
             if extractor.worked():
+                extractor.content['publish_date'] = pub_date_str
                 return extractor.content
         except Exception as e:
             # if the extractor fails for any reason, just continue on to the next one
@@ -95,7 +99,7 @@ class Newspaper3kExtractor(AbstractExtractor):
             'url': url,
             'text': doc.text,
             'title': doc.title,
-            'publish_date': doc.publish_date,
+            'potential_publish_date': doc.publish_date,
             'top_image_url': doc.top_image,
             'authors': doc.authors,
             'extraction_method': METHOD_NEWSPAPER_3k,
@@ -111,7 +115,7 @@ class GooseExtractor(AbstractExtractor):
             'url': url,
             'text': g3_article.cleaned_text,
             'title': g3_article.title,
-            'publish_date': g3_article.publish_date,
+            'potential_publish_date': g3_article.publish_date,
             'top_image_url': g3_article.top_image.src if g3_article.top_image else None,
             'authors': g3_article.authors,
             'extraction_method': METHOD_GOOSE_3,
@@ -127,7 +131,7 @@ class BoilerPipe3Extractor(AbstractExtractor):
             'url': url,
             'text': bp_doc.content,
             'title': bp_doc.title,
-            'publish_date': None,
+            'potential_publish_date': None,
             'top_image_url': None,
             'authors': None,
             'extraction_method': METHOD_BOILER_PIPE_3,
@@ -143,7 +147,7 @@ class TrafilaturaExtractor(AbstractExtractor):
             'url': url,
             'text': text,
             'title': None,
-            'publish_date': None,
+            'potential_publish_date': None,
             'top_image_url': None,
             'authors': None,
             'extraction_method': METHOD_TRIFILATURA,
@@ -158,7 +162,7 @@ class ReadabilityExtractor(AbstractExtractor):
             'url': url,
             'text': re.sub('<[^<]+?>', '', doc.summary()),  # need to remove any tags
             'title': doc.title(),
-            'publish_date': None,
+            'potential_publish_date': None,
             'top_image_url': None,
             'authors': None,
             'extraction_method': METHOD_READABILITY,
@@ -197,7 +201,7 @@ class RawHtmlExtractor(AbstractExtractor):
             'url': url,
             'text': output,
             'title': None,
-            'publish_date': None,
+            'potential_publish_date': None,
             'top_image_url': None,
             'authors': None,
             'extraction_method': METHOD_BEAUTIFUL_SOUP_4,
