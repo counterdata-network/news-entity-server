@@ -1,17 +1,18 @@
 News Entity Server
 ==================
 
-A small API server to return entities found in online news. Originally built to support the 
+A small API server to return entities and other metadata for online news articles. Originally built to support the 
 [Data Against Feminicide](https://datoscontrafeminicidio.net/) project. Technically, this exposes
 API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
 
 
-Deploying
----------
+**Install from Docker**: The easiest approach to just start using this is to install the pre-built image from 
+DockerHub:
 
-This is built to deploy to a containerized hosting service like Heroku or dokku. Just push it and it should
-build and just do the right thing. Use those PaaS tools to scale horizontally.
-
+```
+docker pull rahulbot/news-entity-server:latest
+docker run -p 8000:8000 -e MODEL_MODE=small -m 8G news-entity-server:latest
+```
 
 Developing
 ----------
@@ -75,6 +76,7 @@ POST `text` and `language` content to this endpoint and it returns JSON with all
 #### /content/from-url
 
 POST a `url` to this endpoint and it returns just the extracted content from the HTML.
+
 
 Releasing to DockerHub
 ----------------------
