@@ -1,6 +1,11 @@
 Version History
 ===============
 
+### v2.0.0
+
+* Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are now under `results.entities`.
+* Added offical docker release docker 
+
 ### v1.6.0
 
 Better guessing for publish_date via `htmldate` module.

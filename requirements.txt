@@ -10,6 +10,7 @@ boilerpy3==1.0.5
 readability-lxml==0.8.1
 trafilatura==1.0.0
 fastapi[all]==0.73.0
-uvicorn[standard]==0.17.4
+uvicorn[standard]  # NOTE: let pip figure out the right version based on fastapi
 gunicorn==20.1.0
 htmldate==1.0.0
+tldextract==3.1.2
