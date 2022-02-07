@@ -5,6 +5,14 @@ A small API server to return entities found in online news. Originally built to 
 [Data Against Feminicide](https://datoscontrafeminicidio.net/) project. Technically, this exposes
 API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
 
+
+Deploying
+---------
+
+This is built to deploy to a containerized hosting service like Heroku or dokku. Just push it and it should
+build and just do the right thing. Use those PaaS tools to scale horizontally.
+
+
 Developing
 ----------
 
@@ -19,9 +27,17 @@ pip install -r requirements.txt
 
 Run locally with Gunicorn: `./run.sh`
 
+Or via docker:
+```
+docker image build -t news-entity-server .
+docker container run --rm -it -p 8000:8000 -e MODEL_MODE=small news-entity-server
+```
+
+
 ### Testing
 
 Just run *pytest* to run a small set of test on the API endpoints.
+
 
 Usage
 -----
@@ -60,8 +76,19 @@ POST `text` and `language` content to this endpoint and it returns JSON with all
 
 POST a `url` to this endpoint and it returns just the extracted content from the HTML.
 
-Deploying
----------
+Releasing to DockerHub
+----------------------
 
-This is built to deploy to a containerized hosting service like Heroku or dokku. Just push it and it should
-build and just do the right thing. Use those PaaS tools to scale horizontally.
+I build and release this to DockerHub for easier deployment on your server. To release the latest code:
+
+```
+docker build -t rahulbot/news-entity-server .
+docker push rahulbot/news-entity-server
+```
+
+To release a tagged version:
+
+```
+docker build -t rahulbot/news-entity-server:2.0.0 .
+docker push rahulbot/news-entity-server:2.0.0
+```

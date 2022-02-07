@@ -4,6 +4,7 @@ import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
 from typing import Optional
+from fastapi import FastAPI, Form
 
 import helpers
 import helpers.content as content
@@ -11,17 +12,20 @@ import helpers.entities as entities
 from helpers.request import api_method
 from helpers.custom.domains import get_canonical_mediacloud_domain
 
-from fastapi import FastAPI, Form
-
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="News Entity Server",
-    description="Extract entities from online news in multiple langauges",
+    description="Extract entities from online news in multiple languages",
     version=helpers.VERSION,
     license_info={
         "name": "The MIT License"
-    }
+    },
+    contact={
+        "name": "Rahul Bhargava",
+        "email": "r.bhargava@northeastern.edu",
+        "url": "http://dataculturegroup.org"
+    },
 )
 
 SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging to Sentry
@@ -89,7 +93,7 @@ def content_from_url(url: str = Form(..., description="A publicly accessible web
 @api_method
 def entities_from_content(text: str = Form(..., description="Raw text to check for entities."),
                           language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
-                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL.")):
+                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
     """
     Return all the entities found in content passed in.
     """
