@@ -12,6 +12,7 @@ import regex as re
 import htmldate
 
 from .exceptions import UnableToExtractError
+from .custom.domains import get_canonical_mediacloud_domain
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +70,7 @@ def from_url(url: str, user_agent: str = None, timeout: int = None) -> Dict:
             extractor.extract(url, html_text)
             if extractor.worked():
                 extractor.content['publish_date'] = pub_date_str
+                extractor.content['domain_name'] = get_canonical_mediacloud_domain(url)
                 return extractor.content
         except Exception as e:
             # if the extractor fails for any reason, just continue on to the next one

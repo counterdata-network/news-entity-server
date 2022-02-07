@@ -9,6 +9,7 @@ import helpers
 import helpers.content as content
 import helpers.entities as entities
 from helpers.request import api_method
+from helpers.custom.domains import get_canonical_mediacloud_domain
 
 from fastapi import FastAPI, Form
 
@@ -68,8 +69,10 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
     if include_title and (article_info['title'] is not None):
         article_text += article_info['title'] + " "
     article_text += article_info['text']
-    data = entities.from_text(article_text, language)
-    return data
+    found_entities = entities.from_text(article_text, language)
+    del article_info['text']
+    results = article_info | dict(entities=found_entities)
+    return results
 
 
 @app.post("/content/from-url")
@@ -85,8 +88,27 @@ def content_from_url(url: str = Form(..., description="A publicly accessible web
 @app.post("/entities/from-content")
 @api_method
 def entities_from_content(text: str = Form(..., description="Raw text to check for entities."),
-                          language: str = Form(..., description="One of the supported two-letter language codes.", length=2)):
+                          language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
+                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL.")):
     """
     Return all the entities found in content passed in.
     """
-    return entities.from_text(text, language)
+    results = dict(
+        entites=entities.from_text(text, language),
+        domain_name=get_canonical_mediacloud_domain(url) if url is not None else None,
+        url=url
+    )
+    return results
+
+
+@app.post("/domains/from-url")
+@api_method
+def domain_from_url(url: str = Form(..., description="A publicly accessible web url of a news story.")):
+    """
+    Return the useful "canonical" domain for a url
+    """
+    results = dict(
+        domain_name=get_canonical_mediacloud_domain(url),
+        url=url,
+    )
+    return results

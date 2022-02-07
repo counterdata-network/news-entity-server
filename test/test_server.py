@@ -44,41 +44,56 @@ class TestServer(unittest.TestCase):
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
         data = response.json()
         assert 'results' in data
-        assert len(data['results']) == 23
-        assert data['results'][20]['text'] == 'marzo'
-        assert data['results'][20]['type'] == ENTITY_TYPE_C_DATE
+        assert 'entities' in data['results']
+        assert len(data['results']['entities']) == 23
+        assert data['results']['entities'][20]['text'] == 'marzo'
+        assert data['results']['entities'][20]['type'] == ENTITY_TYPE_C_DATE
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
         data = response.json()
         assert 'results' in data
-        assert len(data['results']) > 0
-        assert data['results'][0]['text'] == 'EE UU'
-        assert data['results'][0]['type'] == 'LOC'
+        assert 'entities' in data['results']
+        assert len(data['results']['entities']) > 0
+        assert data['results']['entities'][0]['text'] == 'EE UU'
+        assert data['results']['entities'][0]['type'] == 'LOC'
 
     def test_entities_from_url_english(self):
         response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
         data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert data['results']['entities'][0]['text'] == 'HALLE'
+        assert data['results']['entities'][0]['type'] == 'ORG'
+        assert len(data['results']['entities']) > 0
         response_with_title = self._client.post('/entities/from-url',
                                                 data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
         data_with_title = response_with_title.json()
-        assert 'results' in data
-        assert len(data['results']) > 0
-        assert 'results' in data
-        assert data['results'][0]['text'] == 'HALLE'
-        assert data['results'][0]['type'] == 'ORG'
-        assert len(data['results']) < len(data_with_title['results'])
+        assert 'results' in data_with_title
+        assert 'entities' in data_with_title['results']
+        assert len(data['results']['entities']) < len(data_with_title['results']['entities'])
 
     def test_entities_from_url_french(self):
         url = "https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php?utm_source=rss_telegramme&utm_medium=rss&utm_campaign=rss&xtor=RSS-20"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH))
         data = response.json()
         assert 'results' in data
-        assert len(data['results']) == 229
+        assert 'entities' in data['results']
+        assert len(data['results']['entities']) == 229
+
+    def test_domain_from_url(self):
+        response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
+        data = response.json()
+        assert 'results' in data
+        assert 'url' in data['results']
+        assert data['results']['url'] == ENGLISH_ARTICLE_URL
+        assert 'domain_name' in data['results']
+        assert data['results']['domain_name'] == 'apnews.com'
 
     def test_content_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
         data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
+        assert 'domain_name' in data['results']
         assert data['results']['url'] == ENGLISH_ARTICLE_URL
         assert 'text' in data['results']
         assert len(data['results']['text']) > 0
