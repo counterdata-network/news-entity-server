@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.0.1
+
+* More consistent models (small vs. large) 
+
 ### v2.0.0
 
 * Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are now under `results.entities`.
