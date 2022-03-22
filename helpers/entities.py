@@ -8,11 +8,11 @@ from helpers.exceptions import UnknownLanguageException
 
 # lookup table that maps from language code to default spaCy NER model
 language_nlp_lookup = {
-    ENGLISH: spacy.load("en_core_web_sm" if MODEL_MODE == MODEL_MODE_SMALL else "en_core_web_trf"),
+    ENGLISH: spacy.load("en_core_web_sm" if MODEL_MODE == MODEL_MODE_SMALL else "en_core_web_lg"),
     SPANISH: spacy.load("es_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "es_core_news_lg"),
     PORTUGUESE: spacy.load("pt_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "pt_core_news_lg"),
     FRENCH: spacy.load("fr_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "fr_core_news_lg"),
-    GERMAN: spacy.load("de_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "de_core_news_md")
+    GERMAN: spacy.load("de_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "de_core_news_lg")
 }
 
 
