@@ -16,7 +16,7 @@ from .custom.domains import get_canonical_mediacloud_domain
 
 logger = logging.getLogger(__name__)
 
-MINIMUM_CONTENT_LENGTH = 200  # less than this and it doesn't count as working extraction (experimentally determined)
+MINIMUM_CONTENT_LENGTH = 250  # less than this and it doesn't count as working extraction (experimentally determined)
 
 # wait only this many seconds for a server to respond with content. important to keep in sync with central server
 DEFAULT_TIMEOUT_SECS = 3

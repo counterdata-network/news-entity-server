@@ -1,13 +1,17 @@
 Version History
 ===============
 
+### v2.1.0
+
+* Update underlying libraries to the latest versions
+
 ### v2.0.2
 
 * Fix bugs in entity-from-content endpoint
 
 ### v2.0.1
 
-* More consistent models (small vs. large) 
+* More consistent models (small vs. large)
 
 ### v2.0.0
 
