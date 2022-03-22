@@ -7,7 +7,7 @@ API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under t
 
 
 **Install from Docker**: The easiest approach to just start using this is to install the pre-built image from 
-DockerHub:
+DockerHub. Set a `WEB_CONCURRENCY` env var if you want more than one worker.
 
 ```
 docker pull rahulbot/news-entity-server:latest
