@@ -1,5 +1,7 @@
 import unittest
 from fastapi.testclient import TestClient
+import os
+import json
 
 from server import app
 from helpers import ENGLISH, SPANISH, VERSION, FRENCH, GERMAN
@@ -8,6 +10,8 @@ from helpers.custom.dates import ENTITY_TYPE_C_DATE
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
 SPANISH_ARTICLE_URL_2 = 'https://www.notigape.com/el-papa-francisco-prepara-viaje-a-hungria-en-septiembre-/229666'
+
+this_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestServer(unittest.TestCase):
@@ -45,9 +49,9 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 23
-        assert data['results']['entities'][20]['text'] == 'marzo'
-        assert data['results']['entities'][20]['type'] == ENTITY_TYPE_C_DATE
+        assert len(data['results']['entities']) == 20
+        assert data['results']['entities'][17]['text'] == 'marzo'
+        assert data['results']['entities'][17]['type'] == ENTITY_TYPE_C_DATE
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
         data = response.json()
         assert 'results' in data
@@ -77,7 +81,7 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 229
+        assert len(data['results']['entities']) == 94
 
     def test_domain_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
@@ -97,6 +101,18 @@ class TestServer(unittest.TestCase):
         assert data['results']['url'] == ENGLISH_ARTICLE_URL
         assert 'text' in data['results']
         assert len(data['results']['text']) > 0
+
+    def test_entities_from_text(self):
+        story = json.load(open(os.path.join(this_dir, 'fixtures', '1952688847.json')))
+        response = self._client.post('/entities/from-content', data=dict(
+            text=story['story_text'], language=story['language'], url=story['url']
+        ))
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert len(data['results']['entities']) == 24
+        assert 'domain_name' in data['results']
+        assert data['results']['domain_name'] == 'europapress.es'
 
 
 if __name__ == "__main__":

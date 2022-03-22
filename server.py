@@ -98,7 +98,7 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
     Return all the entities found in content passed in.
     """
     results = dict(
-        entites=entities.from_text(text, language),
+        entities=entities.from_text(text, language),
         domain_name=get_canonical_mediacloud_domain(url) if url is not None else None,
         url=url
     )
