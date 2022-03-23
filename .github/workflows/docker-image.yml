@@ -34,4 +34,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: rahulbot/news-entity-server:${GITHUB_REF_NAME}
+          tags: rahulbot/news-entity-server:${{GITHUB_REF_NAME}}
