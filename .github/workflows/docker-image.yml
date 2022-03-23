@@ -13,8 +13,7 @@ jobs:
         
     steps:
 
-      -
-        name: Generate Docker metadata
+      - name: Generate Docker metadata
         id: meta
         uses: docker/metadata-action@v3
         with:
