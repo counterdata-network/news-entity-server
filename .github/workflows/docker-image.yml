@@ -13,9 +13,6 @@ jobs:
         
     steps:
 
-      - name: Dump tag name
-        run: echo "Building tag ${GITHUB_REF_NAME}"
-
       -
         name: Generate Docker metadata
         id: meta
@@ -45,5 +42,5 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: ${{ steps.meta.outputs.tags }}
-          tags: rahulbot/news-entity-server:${{GITHUB_REF_NAME}}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
