@@ -10,10 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
-    env:
-      TAG_NAME: ${{ GITHUB_REF_NAME }}
-    
+        
     steps:
 
       - name: Dump tag name
