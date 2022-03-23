@@ -4,7 +4,6 @@ from requests.exceptions import SSLError, ReadTimeout, TooManyRedirects, Connect
 import logging
 
 import helpers
-from helpers.exceptions import UnableToExtractError
 
 logger = logging.getLogger(__name__)
 
@@ -58,8 +57,6 @@ def api_method(func):
             return _error_results(str(tmr), start_time)
         except ReadTimeout as rt:
             return _error_results(str(rt), start_time)
-        except UnableToExtractError as utee:
-            return _error_results(str(utee), start_time)
         except ConnectionError as ce:
             return _error_results(str(ce), start_time)
         except RequestException as rexc:

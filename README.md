@@ -71,11 +71,11 @@ Add a `title` argument, set to 1 or 0, to optionally include the article title i
 
 #### /entities/from-content
 
-POST `text` and `language` content to this endpoint and it returns JSON with all the entities it finds.
+POST `text` and `language` content to this endpoint, and it returns JSON with all the entities it finds.
 
 #### /content/from-url
 
-POST a `url` to this endpoint and it returns just the extracted content from the HTML.
+POST a `url` to this endpoint, and it returns just the extracted content from the HTML.
 
 
 Releasing to DockerHub
