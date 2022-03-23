@@ -3,7 +3,7 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
-from typing import Optional
+from typing import Optional, Dict
 from fastapi import FastAPI, Form
 import mcmetadata
 
@@ -23,7 +23,7 @@ app = FastAPI(
     contact={
         "name": "Rahul Bhargava",
         "email": "r.bhargava@northeastern.edu",
-        "url": "http://dataculturegroup.org"
+        "url": "https://dataculture.northeastern.edu"
     },
 )
 
@@ -73,10 +73,9 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
         article_text += article_info['article_title'] + " "
     article_text += article_info['text_content']
     found_entities = entities.from_text(article_text, language)
-    del article_info['text_content']
     results = article_info | dict(entities=found_entities)
-    # for backwards compatability
-    results['title'] = results['article_title']
+    results = _backwards_compatible_results(results)
+    del results['text']
     return results
 
 
@@ -87,7 +86,22 @@ def content_from_url(url: str = Form(..., description="A publicly accessible web
     Return the content found at the URL. This uses a fallback mechanism to iterate through a list of 3rd party content
     extractors. It will try each until it finds one that succeeds.
     """
-    return mcmetadata.extract(url)['text_content']
+    results = mcmetadata.extract(url)
+    results = _backwards_compatible_results(results)
+    # for backwards compatability
+    return results
+
+
+def _backwards_compatible_results(results: Dict) -> Dict:
+    results['text'] = results['text_content']
+    del results['text_content']
+    results['title'] = results['article_title']
+    del results['article_title']
+    results['url'] = results['original_url']
+    del results['original_url']
+    results['domain_name'] = results['canonical_domain']
+    del results['canonical_domain']
+    return results
 
 
 @app.post("/entities/from-content")
