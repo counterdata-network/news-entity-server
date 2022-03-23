@@ -2,15 +2,19 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
+    tags:
+    - '*'
 
 jobs:
 
   build:
 
     runs-on: ubuntu-latest
-
+    env: 
+      TAG_NAME: ${{ github.ref_name }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag rahulbot/news-entity-server:$(date +%s)
+      - uses: actions/checkout@v2
+      - name: Dump tag name
+        run: echo 'Building tag $TAG_NAME'
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag rahulbot/news-entity-server:$TAG_NAME
