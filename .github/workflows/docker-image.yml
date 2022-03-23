@@ -13,17 +13,9 @@ jobs:
         
     steps:
 
-      - name: Generate Docker metadata
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            rahulbot/news-entity-server
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-
+      - name: Dump tag name
+        run: echo "Building tag ${GITHUB_REF_NAME}"
+        
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         
@@ -42,4 +34,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: rahulbot/news-entity-server:latest
