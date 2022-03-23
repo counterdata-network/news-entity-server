@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     tags:
-    - '*'
+      - 'v*.*.*'
 
 jobs:
 
@@ -11,10 +11,25 @@ jobs:
 
     runs-on: ubuntu-latest
     
+    env:
+      TAG_NAME: ${{ GITHUB_REF_NAME }}
+    
     steps:
 
       - name: Dump tag name
         run: echo "Building tag ${GITHUB_REF_NAME}"
+
+      -
+        name: Generate Docker metadata
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            rahulbot/news-entity-server
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -33,5 +48,5 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: ${{ steps.meta.outputs.tags }}
           tags: rahulbot/news-entity-server:${{GITHUB_REF_NAME}}
