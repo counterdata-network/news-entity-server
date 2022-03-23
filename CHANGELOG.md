@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.2.0
+
+* Change to use new `mediacloud-metadata` module under the hood for article fetching and extraction
+
 ### v2.1.0
 
 * Update underlying libraries to the latest versions
