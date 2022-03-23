@@ -3,14 +3,13 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
-from typing import Optional
+from typing import Optional, Dict
 from fastapi import FastAPI, Form
+import mcmetadata
 
 import helpers
-import helpers.content as content
 import helpers.entities as entities
 from helpers.request import api_method
-from helpers.custom.domains import get_canonical_mediacloud_domain
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ app = FastAPI(
     contact={
         "name": "Rahul Bhargava",
         "email": "r.bhargava@northeastern.edu",
-        "url": "http://dataculturegroup.org"
+        "url": "https://dataculture.northeastern.edu"
     },
 )
 
@@ -67,15 +66,16 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
     """
     Return all the entities found in content extracted from the URL.
     """
-    article_info = content.from_url(url)
+    article_info = mcmetadata.extract(url)
     include_title = title == 1 if title is not None else False
     article_text = ""
-    if include_title and (article_info['title'] is not None):
-        article_text += article_info['title'] + " "
-    article_text += article_info['text']
+    if include_title and (article_info['article_title'] is not None):
+        article_text += article_info['article_title'] + " "
+    article_text += article_info['text_content']
     found_entities = entities.from_text(article_text, language)
-    del article_info['text']
     results = article_info | dict(entities=found_entities)
+    results = _backwards_compatible_results(results)
+    del results['text']
     return results
 
 
@@ -86,7 +86,22 @@ def content_from_url(url: str = Form(..., description="A publicly accessible web
     Return the content found at the URL. This uses a fallback mechanism to iterate through a list of 3rd party content
     extractors. It will try each until it finds one that succeeds.
     """
-    return content.from_url(url)
+    results = mcmetadata.extract(url)
+    results = _backwards_compatible_results(results)
+    # for backwards compatability
+    return results
+
+
+def _backwards_compatible_results(results: Dict) -> Dict:
+    results['text'] = results['text_content']
+    del results['text_content']
+    results['title'] = results['article_title']
+    del results['article_title']
+    results['url'] = results['original_url']
+    del results['original_url']
+    results['domain_name'] = results['canonical_domain']
+    del results['canonical_domain']
+    return results
 
 
 @app.post("/entities/from-content")
@@ -99,7 +114,7 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
     """
     results = dict(
         entities=entities.from_text(text, language),
-        domain_name=get_canonical_mediacloud_domain(url) if url is not None else None,
+        domain_name=mcmetadata.domains.from_url(url) if url is not None else None,
         url=url
     )
     return results
@@ -112,7 +127,7 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
     Return the useful "canonical" domain for a url
     """
     results = dict(
-        domain_name=get_canonical_mediacloud_domain(url),
+        domain_name=mcmetadata.domains.from_url(url),
         url=url,
     )
     return results
