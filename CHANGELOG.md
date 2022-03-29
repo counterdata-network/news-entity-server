@@ -1,9 +1,9 @@
 Version History
 ===============
 
-### v2.2.0
+### v2.1.1
 
-* Change to use new `mediacloud-metadata` module under the hood for article fetching and extraction
+* Remove language param from `entities/from-url`; we guess it from the text
 
 ### v2.1.0
 
