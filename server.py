@@ -61,7 +61,6 @@ def supported_languages():
 @app.post("/entities/from-url")
 @api_method
 def entities_from_url(url: str = Form(..., description="A publicly accessible web url of a news story."),
-                      language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
                       title: Optional[int] = Form(None, description="Optional 1 or 0 indicating if the title should be prefixed the content before checking for entities.",)):
     """
     Return all the entities found in content extracted from the URL.
@@ -72,7 +71,7 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
     if include_title and (article_info['article_title'] is not None):
         article_text += article_info['article_title'] + " "
     article_text += article_info['text_content']
-    found_entities = entities.from_text(article_text, language)
+    found_entities = entities.from_text(article_text, article_info['language'])
     results = article_info | dict(entities=found_entities)
     results = _backwards_compatible_results(results)
     del results['text']
