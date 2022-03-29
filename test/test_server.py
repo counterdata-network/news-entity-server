@@ -4,7 +4,7 @@ import os
 import json
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, GERMAN
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, GERMAN, MODEL_MODE_SMALL
 from helpers.custom.dates import ENTITY_TYPE_C_DATE
 
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
@@ -49,9 +49,14 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 20
-        assert data['results']['entities'][17]['text'] == 'marzo'
-        assert data['results']['entities'][17]['type'] == ENTITY_TYPE_C_DATE
+        if data['modelMode'] == MODEL_MODE_SMALL:
+            assert len(data['results']['entities']) == 23
+            assert data['results']['entities'][20]['text'] == 'marzo'
+            assert data['results']['entities'][20]['type'] == ENTITY_TYPE_C_DATE
+        else:
+            assert len(data['results']['entities']) == 20
+            assert data['results']['entities'][17]['text'] == 'marzo'
+            assert data['results']['entities'][17]['type'] == ENTITY_TYPE_C_DATE
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
         data = response.json()
         assert 'results' in data
@@ -81,7 +86,11 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 94
+        assert 'modelMode' in data
+        if data['modelMode'] == MODEL_MODE_SMALL:
+            assert len(data['results']['entities']) == 229
+        else:
+            assert len(data['results']['entities']) == 94
 
     def test_domain_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
@@ -113,6 +122,13 @@ class TestServer(unittest.TestCase):
         assert len(data['results']['entities']) == 24
         assert 'domain_name' in data['results']
         assert data['results']['domain_name'] == 'europapress.es'
+
+    def test_unable_to_parse(self):
+        url = "http://www.prigepp.org/aula-foro-answer.php?idcomentario=301c4&idforo=cc0&idcrso=467&CodigoUni=100190"
+        response = self._client.post('/entities/from-url', data=dict(url=url))
+        data = response.json()
+        assert 'status' in data
+        assert data['status'] == 'error'
 
 
 if __name__ == "__main__":
