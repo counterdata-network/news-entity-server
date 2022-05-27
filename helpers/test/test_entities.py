@@ -14,7 +14,7 @@ class TestEntities(unittest.TestCase):
         story = json.load(open(os.path.join(this_dir, 'fixtures', '2210723002.json')))
         entity_list = entities.from_text(story['story_text'], story['language'])
         if MODEL_MODE == MODEL_MODE_SMALL:
-            assert len(entity_list) == 89
+            assert len(entity_list) == 72
         else:
             assert len(entity_list) == 56
         for e in entity_list:

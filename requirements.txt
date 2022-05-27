@@ -1,9 +1,9 @@
-requests==2.27.1
-python-dotenv==0.20.0
-spacy==3.2.4
+requests==2.27.*
+python-dotenv==0.20.*
+spacy==3.3.*
 pytest==7.1.2
-sentry-sdk==1.5.10
-fastapi[all]==0.75.0
+sentry-sdk==1.5.*
+fastapi[all]==0.78.*
 uvicorn[standard]  # NOTE: let pip figure out the right version based on fastapi
 gunicorn==20.1.0
-mediacloud-metadata==0.4.1
+mediacloud-metadata==0.5.0

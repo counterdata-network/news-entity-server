@@ -70,8 +70,8 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert data['results']['entities'][0]['text'] == 'HALLE'
-        assert data['results']['entities'][0]['type'] == 'ORG'
+        assert data['results']['entities'][0]['text'] == 'Belgium'
+        assert data['results']['entities'][0]['type'] == 'GPE'
         assert len(data['results']['entities']) > 0
         response_with_title = self._client.post('/entities/from-url',
                                                 data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
@@ -88,7 +88,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 229
+            assert len(data['results']['entities']) == 176
         else:
             assert len(data['results']['entities']) == 94
 
@@ -119,7 +119,7 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 24
+        assert len(data['results']['entities']) == 21
         assert 'domain_name' in data['results']
         assert data['results']['domain_name'] == 'europapress.es'
 
