@@ -1,5 +1,7 @@
 import time
 from functools import wraps
+
+import mcmetadata.exceptions
 from requests.exceptions import SSLError, ReadTimeout, TooManyRedirects, ConnectionError, RequestException
 import logging
 
@@ -50,6 +52,8 @@ def api_method(func):
                 'modelMode': helpers.MODEL_MODE
             }
         # don't log certain exceptions, because they are expected and are too noisy on Sentry
+        except mcmetadata.exceptions.UnableToExtractError as utee:
+            return _error_results(str(utee), start_time)
         except SSLError as se:
             # this is a subclass of ConnectionError, but good to catch it so we have a more detailed error message
             return _error_results(str(se), start_time)
@@ -63,6 +67,8 @@ def api_method(func):
             return _error_results(str(rexc), start_time)
         except ValueError as ve:
             return _error_results(str(ve), start_time)
+        except RuntimeError as re:
+            return _error_results(str(re), start_time)
         except Exception as e:
             # log other, unexpected, exceptions to Sentry
             logger.exception(e)

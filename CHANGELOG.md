@@ -1,9 +1,23 @@
 Version History
 ===============
 
-### v2.1.1
+### v2.3.1
+
+* Update dependencies (including spacy models)
+
+### v2.3.0
+
+* Update dependencies (including spacy models)
+* Catch and ignore more expected "webpage didn't respond" errors
+
+### v2.2.1
 
 * Remove language param from `entities/from-url`; we guess it from the text
+* Tweaks for production server horizontal scaling
+
+### v2.2.0
+
+* Switch some underlying dependencies to centralize our news article metadata code
 
 ### v2.1.0
 
@@ -19,8 +33,9 @@ Version History
 
 ### v2.0.0
 
-* Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are now under `results.entities`.
-* Added offical docker release docker 
+* Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are 
+  now under `results.entities`.
+* Added official docker release docker 
 
 ### v1.6.0
 

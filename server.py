@@ -113,7 +113,7 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
     """
     results = dict(
         entities=entities.from_text(text, language),
-        domain_name=mcmetadata.domains.from_url(url) if url is not None else None,
+        domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,
         url=url
     )
     return results
@@ -126,7 +126,7 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
     Return the useful "canonical" domain for a url
     """
     results = dict(
-        domain_name=mcmetadata.domains.from_url(url),
+        domain_name=mcmetadata.urls.canonical_domain(url),
         url=url,
     )
     return results
