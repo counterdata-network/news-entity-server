@@ -6,6 +6,7 @@ from sentry_sdk.integrations.logging import ignore_logger
 from typing import Optional, Dict
 from fastapi import FastAPI, Form
 import mcmetadata
+import uvicorn
 
 import helpers
 import helpers.entities as entities
@@ -130,3 +131,6 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
         url=url,
     )
     return results
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
