@@ -1,9 +1,13 @@
 Version History
 ===============
 
+### v2.3.1
+
+* Update dependencies (including spacy models)
+
 ### v2.3.0
 
-* Update depedencies (including spacy models)
+* Update dependencies (including spacy models)
 * Catch and ignore more expected "webpage didn't respond" errors
 
 ### v2.2.1
@@ -29,7 +33,8 @@ Version History
 
 ### v2.0.0
 
-* Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are now under `results.entities`.
+* Refactored to include canonical_domain_name. If you are using entities endpoints, the entities themselves are 
+  now under `results.entities`.
 * Added official docker release docker 
 
 ### v1.6.0
