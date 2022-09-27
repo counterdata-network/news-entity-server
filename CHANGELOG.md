@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.3.2
+
+* Add new `/entities/from-html` endpoint
+
 ### v2.3.1
 
 * Update dependencies (including spacy models)
