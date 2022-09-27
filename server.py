@@ -122,9 +122,9 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
 
 @app.post("/entities/from-html")
 @api_method
-def entities_from_content(html: str = Form(..., description="Raw HTML to check for entities."),
-                          language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
-                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
+def entities_from_html(html: str = Form(..., description="Raw HTML to check for entities."),
+                       language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
+                       url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
     """
     Return all the entities found in content from HTML passed in.
     """
