@@ -120,6 +120,23 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
     return results
 
 
+@app.post("/entities/from-html")
+@api_method
+def entities_from_content(html: str = Form(..., description="Raw HTML to check for entities."),
+                          language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
+                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
+    """
+    Return all the entities found in content from HTML passed in.
+    """
+    content = mcmetadata.content.from_html(url, html)
+    results = dict(
+        entities=entities.from_text(content['text'], language),
+        domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,
+        url=url
+    )
+    return results
+
+
 @app.post("/domains/from-url")
 @api_method
 def domain_from_url(url: str = Form(..., description="A publicly accessible web url of a news story.")):
@@ -131,6 +148,7 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
         url=url,
     )
     return results
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,4 +1,6 @@
 import unittest
+
+import mcmetadata.content
 from fastapi.testclient import TestClient
 import os
 import json
@@ -19,6 +21,12 @@ class TestServer(unittest.TestCase):
     def setUp(self) -> None:
         # This initializes the base client used by all the other tests
         self._client = TestClient(app)
+
+    def test_basic(self):
+        url = "https://www.nytimes.com/2022/09/20/us/politics/pandemic-aid-fraud-minnesota.html"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))
+        data = response.json()
+        assert data['status'] == 'ok'
 
     def test_too_many_redirects(self):
         url = "https://mepublic.tarrantcounty.com/default.aspx?AspxAutoDetectCookieSupport=1"
@@ -64,6 +72,17 @@ class TestServer(unittest.TestCase):
         assert len(data['results']['entities']) > 0
         assert data['results']['entities'][0]['text'] == 'EE UU'
         assert data['results']['entities'][0]['type'] == 'LOC'
+
+    def test_entities_from_html_english(self):
+        url = "https://www.bostonglobe.com/2022/09/27/nation/cdc-makes-masking-optional-hospitals-nursing-homes-regions-without-high-covid-transmission/"
+        html_text, _ = mcmetadata.webpages.fetch(url)
+        response = self._client.post('/entities/from-html', data=dict(url=ENGLISH_ARTICLE_URL, html=html_text,
+                                                                      language=ENGLISH))
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert data['results']['entities'][0]['text'] == 'late Friday'
+        assert data['results']['entities'][0]['type'] == 'DATE'
 
     def test_entities_from_url_english(self):
         response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
