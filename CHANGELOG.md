@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.3.3
+
+* Update dependencies
+
 ### v2.3.2
 
 * Add new `/entities/from-html` endpoint
