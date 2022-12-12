@@ -137,6 +137,15 @@ class TestServer(unittest.TestCase):
         assert 'domain_name' in data['results']
         assert data['results']['domain_name'] == 'europapress.es'
 
+    def test_empty_from_url(self):
+        response = self._client.post('/entities/from-url', data=dict(
+            url="https://app.clickup.com/t/3ymrcbv", language="ES"
+        ))
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert len(data['results']['entities']) == 0
+
 
 if __name__ == "__main__":
     unittest.main()

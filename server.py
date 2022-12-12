@@ -11,6 +11,7 @@ import uvicorn
 import helpers
 import helpers.entities as entities
 from helpers.request import api_method
+from helpers.exceptions import UnknownLanguageException
 
 logger = logging.getLogger(__name__)
 
@@ -30,13 +31,13 @@ app = FastAPI(
 
 SENTRY_DSN = os.environ.get('SENTRY_DSN', None)  # optional centralized logging to Sentry
 if SENTRY_DSN:
-    sentry_sdk.init(dsn=SENTRY_DSN, release=helpers.VERSION)
+    sentry_sdk.init(dsn=SENTRY_DSN, release=helpers.VERSION,
+                    ignore_errors=[UnknownLanguageException])
     # make sure some errors we don't care about don't make it to sentry
     ignore_logger("boilerpy3")
     ignore_logger("trafilatura.utils")
     ignore_logger("trafilatura.core")
     ignore_logger("readability.readability")
-
     logger.info("  SENTRY_DSN: {}".format(SENTRY_DSN))
     try:
         app.add_middleware(SentryAsgiMiddleware)
