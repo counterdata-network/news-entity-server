@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.10
 
 WORKDIR /news-entity-server
 EXPOSE 8000
