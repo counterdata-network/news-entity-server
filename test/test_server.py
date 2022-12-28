@@ -22,7 +22,7 @@ class TestServer(unittest.TestCase):
         self._client = TestClient(app)
 
     def test_basic(self):
-        url = "https://www.nytimes.com/2022/09/20/us/politics/pandemic-aid-fraud-minnesota.html"
+        url = "https://www.bostonglobe.com/2022/12/28/metro/more-cancellations-delays-travelers-southwest-airlines/"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))
         data = response.json()
         assert data['status'] == 'ok'
