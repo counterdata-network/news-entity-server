@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.3.4
+
+* Force python 3.10 to fix cchardet build error on deployment (was defaulting to 3.11)
+
 ### v2.3.3
 
 * Update dependencies
