@@ -1,6 +1,9 @@
 News Entity Server
 ==================
 
+[![Python tests](https://github.com/dataculturegroup/news-entity-server/actions/workflows/test.yml/badge.svg)](https://github.com/dataculturegroup/news-entity-server/actions/workflows/test.yml)
+[![Docker Image CI](https://github.com/dataculturegroup/news-entity-server/actions/workflows/docker-image.yml/badge.svg)](https://github.com/dataculturegroup/news-entity-server/actions/workflows/docker-image.yml)
+
 A small API server to return entities and other metadata for online news articles. Originally built to support the 
 [Data Against Feminicide](https://datoscontrafeminicidio.net/) project. Technically, this exposes
 API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
