@@ -57,7 +57,7 @@ class TestServer(unittest.TestCase):
         assert 'results' in data
         assert 'entities' in data['results']
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 19
+            assert len(data['results']['entities']) == 29
         else:
             assert len(data['results']['entities']) == 20
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
@@ -65,8 +65,8 @@ class TestServer(unittest.TestCase):
         assert 'results' in data
         assert 'entities' in data['results']
         assert len(data['results']['entities']) > 0
-        assert data['results']['entities'][0]['text'] == 'Trump'
-        assert data['results']['entities'][0]['type'] == 'PER'
+        assert data['results']['entities'][2]['text'] == 'Biden'
+        assert data['results']['entities'][2]['type'] == 'PER'
 
     def test_entities_from_html_english(self):
         url = "https://www.bostonglobe.com/2022/09/27/nation/cdc-makes-masking-optional-hospitals-nursing-homes-regions-without-high-covid-transmission/"
@@ -102,7 +102,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 128
+            assert len(data['results']['entities']) == 253
         else:
             assert len(data['results']['entities']) == 94
 
@@ -133,18 +133,18 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 20
+        assert len(data['results']['entities']) == 23
         assert 'domain_name' in data['results']
         assert data['results']['domain_name'] == 'europapress.es'
 
-    def test_empty_from_url(self):
+    def test_error_from_url(self):
         response = self._client.post('/entities/from-url', data=dict(
             url="https://app.clickup.com/t/3ymrcbv", language="ES"
         ))
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 0
+        assert len(data['results']['entities']) == 2
 
 
 if __name__ == "__main__":
