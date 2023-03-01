@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.3.6
+
+* More CI work
+
 ### v2.3.5
 
 * Continuous integration updates (built and pushed via GitHub Actions to DockerHub)
