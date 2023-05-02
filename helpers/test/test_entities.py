@@ -16,12 +16,25 @@ class TestEntities(unittest.TestCase):
         if MODEL_MODE == MODEL_MODE_SMALL:
             assert len(entity_list) == 68
         else:
-            assert len(entity_list) == 56
+            assert len(entity_list) == 50
         for e in entity_list:
             assert 'text' in e
             assert len(e['text']) > 0
             assert 'type' in e
             assert e['type'] in ['ORG', 'PER', 'LOC', 'C_DATE', 'MISC']
+
+    def test_korean(self):
+        stories = json.load(open(os.path.join(this_dir, 'fixtures', 'ko_sample_stories.json')))
+        entity_list = entities.from_text(stories[0], 'ko')
+        if MODEL_MODE == MODEL_MODE_SMALL:
+            assert len(entity_list) == 69
+        else:
+            assert len(entity_list) == 77
+        for e in entity_list:
+            assert 'text' in e
+            assert len(e['text']) > 0
+            assert 'type' in e
+            assert e['type'] in ['DT', 'LC', 'OG', 'PS', 'QT', 'TI']
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 import spacy
 from typing import List, Dict
 
-from helpers import ENGLISH, SPANISH, PORTUGUESE, FRENCH, GERMAN, MODEL_MODE_SMALL, MODEL_MODE
+from helpers import ENGLISH, SPANISH, PORTUGUESE, FRENCH, GERMAN, KOREAN, MODEL_MODE_SMALL, MODEL_MODE
 import helpers.custom.ages as ages
 import helpers.custom.dates as dates
 from helpers.exceptions import UnknownLanguageException
@@ -12,7 +12,8 @@ language_nlp_lookup = {
     SPANISH: spacy.load("es_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "es_core_news_lg"),
     PORTUGUESE: spacy.load("pt_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "pt_core_news_lg"),
     FRENCH: spacy.load("fr_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "fr_core_news_lg"),
-    GERMAN: spacy.load("de_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "de_core_news_lg")
+    GERMAN: spacy.load("de_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "de_core_news_lg"),
+    KOREAN: spacy.load("ko_core_news_sm" if MODEL_MODE == MODEL_MODE_SMALL else "ko_core_news_lg")
 }
 
 

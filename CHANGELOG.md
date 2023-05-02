@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.4.0
+
+* Added Korean language model support
+
 ### v2.3.6
 
 * More CI work

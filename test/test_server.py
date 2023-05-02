@@ -6,7 +6,7 @@ import os
 import json
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, MODEL_MODE_SMALL
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, MODEL_MODE_SMALL
 
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
@@ -93,6 +93,18 @@ class TestServer(unittest.TestCase):
         assert 'results' in data_with_title
         assert 'entities' in data_with_title['results']
         assert len(data['results']['entities']) < len(data_with_title['results']['entities'])
+
+    def test_entities_from_url_korean(self):
+        url = "https://www.donga.com/news/Economy/article/all/20230503/119113986/1?ref=main"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=KOREAN))
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert 'modelMode' in data
+        if data['modelMode'] == MODEL_MODE_SMALL:
+            assert len(data['results']['entities']) == 167
+        else:
+            assert len(data['results']['entities']) == 171
 
     def test_entities_from_url_french(self):
         url = "https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php?utm_source=rss_telegramme&utm_medium=rss&utm_campaign=rss&xtor=RSS-20"
