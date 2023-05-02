@@ -37,4 +37,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: rahulbot/news-entity-server:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-entity-server:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-entity-server:${{github.ref_name}}
