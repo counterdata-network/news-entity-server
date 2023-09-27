@@ -18,7 +18,7 @@ MODEL_MODES = [MODEL_MODE_SMALL, MODEL_MODE_LARGE]
 
 load_dotenv()
 
-VERSION = '2.4.0'
+VERSION = '2.4.1'
 
 # setup logging
 logging.basicConfig(level=logging.INFO,
