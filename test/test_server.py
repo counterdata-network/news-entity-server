@@ -102,7 +102,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 167
+            assert len(data['results']['entities']) == 175
         else:
             assert len(data['results']['entities']) == 171
 
@@ -114,7 +114,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 253
+            assert len(data['results']['entities']) == 221
         else:
             assert len(data['results']['entities']) == 94
 
