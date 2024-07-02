@@ -10,7 +10,6 @@ from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, MODEL_MODE_SMALL
 
 ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
-SPANISH_ARTICLE_URL_2 = 'https://www.notigape.com/el-papa-francisco-prepara-viaje-a-hungria-en-septiembre-/229666'
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -52,14 +51,6 @@ class TestServer(unittest.TestCase):
         assert data['version'] == VERSION
 
     def test_entities_from_url_spanish(self):
-        response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL_2, language=SPANISH))
-        data = response.json()
-        assert 'results' in data
-        assert 'entities' in data['results']
-        if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 29
-        else:
-            assert len(data['results']['entities']) == 20
         response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
         data = response.json()
         assert 'results' in data
@@ -102,7 +93,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 175
+            assert len(data['results']['entities']) == 166
         else:
             assert len(data['results']['entities']) == 171
 
@@ -114,7 +105,7 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 221
+            assert len(data['results']['entities']) == 257
         else:
             assert len(data['results']['entities']) == 94
 
@@ -156,7 +147,8 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 2
+        assert len(data['results']['entities']) == 1
+        assert data['results']['entities'][0]['text'] == 'ClickUp'
 
 
 if __name__ == "__main__":
