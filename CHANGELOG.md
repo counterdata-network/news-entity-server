@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.4.2
+
+* Update spacey models and other libraries to latest versions
+
 ### v2.4.1
 
 * Update spacey models and other libraries to latest versions
