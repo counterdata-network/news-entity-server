@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.4.3
+
+* Docker build tweaks to try to reduce image size so it builds and releases via GH Actions
+
 ### v2.4.2
 
 * Update spacey models and other libraries to latest versions

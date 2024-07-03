@@ -94,6 +94,6 @@ docker push rahulbot/news-entity-server
 To release a tagged version:
 
 ```
-docker build -t rahulbot/news-entity-server:2.0.0 .
-docker push rahulbot/news-entity-server:2.0.0
+docker build -t rahulbot/news-entity-server:2.4.2 .
+docker push rahulbot/news-entity-server:2.4.2
 ```
