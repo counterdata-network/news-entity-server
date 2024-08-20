@@ -9,8 +9,8 @@ A small API server to return entities and other metadata for online news article
 API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
 
 
-**Install from Docker**: The easiest approach to just start using this is to install the pre-built image from 
-DockerHub. Set a `WEB_CONCURRENCY` env var if you want more than one worker.
+**Install from Docker**: The easiest approach to just start using this is to [install the pre-built image from 
+DockerHub](https://hub.docker.com/r/rahulbot/news-entity-server). Set a `WEB_CONCURRENCY` env var if you want more than one worker.
 
 ```
 docker pull rahulbot/news-entity-server:latest
