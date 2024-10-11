@@ -59,9 +59,6 @@ def version():
 def supported_languages():
     return helpers.LANGUAGES
 
-@app.get("/favicon.ico")
-def favicon():
-    return {"message": "No favicon available"}
 
 @app.post("/entities/from-url")
 @api_method
