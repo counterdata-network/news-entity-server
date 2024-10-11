@@ -1,12 +1,13 @@
 import unittest
-
+import pytest
+import time
 import mcmetadata.content
 from fastapi.testclient import TestClient
 import os
 import json
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, MODEL_MODE_SMALL
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN,GERMAN, MODEL_MODE_SMALL
 
 ENGLISH_ARTICLE_URL = 'https://web.archive.org/web/20240329152732/https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://web.archive.org/web/20220809180347/https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
@@ -109,6 +110,24 @@ class TestServer(unittest.TestCase):
         else:
             assert len(data['results']['entities']) == 94
 
+    def test_entities_from_url_german(self):
+            url = "https://web.archive.org/web/20241009131438/https://musikderzeit.de/"
+            response = self._client.post('/entities/from-url', data=dict(url=url, language=GERMAN))
+            data = response.json()
+            assert 'results' in data
+            assert 'entities' in data['results']
+            
+            assert len(data['results']['entities']) > 0
+            assert data['results']['entities'][2]['text'] == 'Gare du Nord Basel'
+            assert data['results']['entities'][2]['type'] == 'LOC'
+            
+            assert 'modelMode' in data
+            if data['modelMode'] == MODEL_MODE_SMALL:
+                assert len(data['results']['entities']) == 54
+            else:
+                assert len(data['results']['entities']) >= 54
+            
+
     def test_domain_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
         data = response.json()
@@ -149,7 +168,10 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert len(data['results']['entities']) == 1
         assert data['results']['entities'][0]['text'] == 'ClickUp'
-
+    @pytest.fixture(autouse=True)
+    def slow_down_tests(self):
+        yield
+        time.sleep(1)
 
 if __name__ == "__main__":
     unittest.main()

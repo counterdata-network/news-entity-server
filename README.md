@@ -30,6 +30,7 @@ pip install -r requirements.txt
 ### Running Locally
 
 Run locally with Gunicorn: `./run.sh`
+*Note:* The root URL does not return an output, an endpoint must be used.
 
 Or via docker:
 ```
@@ -42,11 +43,30 @@ docker container run --rm -it -p 8000:8000 -e MODEL_MODE=small news-entity-serve
 
 Just run *pytest* to run a small set of test on the API endpoints.
 
+#### Language Testing
+
+To verify that the API is successfully extracting entities such as person name from a news article, with our various offered languages, use the following code snippet:
+### Example Python Code
+
+```python
+import requests
+import json
+
+BASE_URL = "http://localhost:8000/"
+endpoint = "entities/from-url"
+# this url can be replaced with an article with the language of your choosing
+url = "https://www.band.uol.com.br/bandnews-fm/rio-de-janeiro/noticias/acusado-de-assassinar-namorada-a-facadas-tem-prisao-convertida-em-preventiva-16574059"
+
+response = requests.post(BASE_URL + endpoint, data=dict(url=url, language='en', title=1)) # reference
+
+# Pretty-print the response as JSON
+print(json.dumps(response.json(), indent=4))
+'''
 
 Usage
 -----
 
-API documentation is available at http://localhost:5000/redoc. See the code in `test/test_server.py` for examples.
+API documentation is available at http://localhost:8000/redoc. See the code in `test/test_server.py` for examples.
 
 ### API Endpoints
 
@@ -79,7 +99,6 @@ POST `text` and `language` content to this endpoint, and it returns JSON with al
 #### /content/from-url
 
 POST a `url` to this endpoint, and it returns just the extracted content from the HTML.
-
 
 Releasing to DockerHub
 ----------------------
