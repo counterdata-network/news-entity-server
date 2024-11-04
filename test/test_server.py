@@ -7,14 +7,18 @@ import os
 import json
 import re
 from collections import Counter
+import logging
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN,GERMAN, MODEL_MODE_SMALL,MODEL_MODE_LARGE
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN,GERMAN, MODEL_MODE_SMALL
 
 ENGLISH_ARTICLE_URL = 'https://web.archive.org/web/20240329152732/https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://web.archive.org/web/20220809180347/https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class TestServer(unittest.TestCase):
@@ -176,15 +180,14 @@ class TestServer(unittest.TestCase):
         response = self._client.post('/entities/from-url', data=dict(url=url, language='de', title=1))
         
         data = response.json()
-        assert 'results' in datax
+        assert 'results' in data
         json_string = json.dumps(data['results'])
-        escape_sequences = re.findall(r'\\u[0-9a-fA-F]{4}', json_string)
+        escape_sequences = re.findall(r'\\u[0-9a-fA-F]{4}', json_string) # finds pattern \uXXXX for escape seq
         escape_count = Counter(escape_sequences)
         
         assert len(escape_count) > 0, "No escape sequences found in response data"
         for esc, count in escape_count.items():
-            print(f"Found escape sequence {esc}: {count} times")
-
+            logger.debug(f"Found escape sequence {esc}: {count} times")
     @pytest.fixture(autouse=True)
     def slow_down_tests(self):
         yield
