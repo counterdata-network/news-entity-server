@@ -175,19 +175,26 @@ class TestServer(unittest.TestCase):
         assert len(data['results']['entities']) == 1
         assert data['results']['entities'][0]['text'] == 'ClickUp'
 
-    def test_escape_sequences_from_url(self):
+    def test_escape_sequences_from_url(self): 
         url= "https://web.archive.org/web/20241009131438/https://musikderzeit.de/"
         response = self._client.post('/entities/from-url', data=dict(url=url, language='de', title=1))
-        
         data = response.json()
         assert 'results' in data
-        json_string = json.dumps(data['results'])
-        escape_sequences = re.findall(r'\\u[0-9a-fA-F]{4}', json_string) # finds pattern \uXXXX for escape seq
-        escape_count = Counter(escape_sequences)
+        escape_sequences = []
+        for result in data['results']:
+            if isinstance(result, dict) and 'text' in result:
+                sequences = re.findall(r'\\u[0-9a-fA-F]{4}', result['text']) # finds pattern \uXXXX for escape seq
+                escape_sequences.extend(sequences)
         
-        assert len(escape_count) > 0, "No escape sequences found in response data"
-        for esc, count in escape_count.items():
-            logger.debug(f"Found escape sequence {esc}: {count} times")
+        escape_count = Counter(escape_sequences)
+
+        assert len(escape_count) == 0, "No escape sequences found in response data"
+        if escape_sequences:
+                for esc, count in escape_count.items():
+                    logger.debug(f"Found escape sequence {esc}: {count} times")
+        assert any("György" in result['text'] for result in data['results'] if isinstance(result, dict)), \
+        "Expected text 'György' not found in response data"
+
     @pytest.fixture(autouse=True)
     def slow_down_tests(self):
         yield
