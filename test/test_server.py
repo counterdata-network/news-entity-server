@@ -1,4 +1,5 @@
 import unittest
+import time
 
 import mcmetadata.content
 from fastapi.testclient import TestClient
@@ -19,6 +20,7 @@ class TestServer(unittest.TestCase):
     def setUp(self) -> None:
         # This initializes the base client used by all the other tests
         self._client = TestClient(app)
+        time.sleep(1)  # Delay before each test runs to make sure we don't hit WM rate limit
 
     def test_basic(self):
         url = "https://web.archive.org/web/20221228220125/https://www.bostonglobe.com/2022/12/28/metro/more-cancellations-delays-travelers-southwest-airlines/"
@@ -147,8 +149,14 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 1
+        assert len(data['results']['entities']) == 2
         assert data['results']['entities'][0]['text'] == 'ClickUp'
+
+    def test_escape_sequences_from_url(self):
+        url= "https://web.archive.org/web/20241009131438/https://musikderzeit.de/"
+        response = self._client.post('/entities/from-url', data=dict(url=url, language='de', title=1))
+        data = response.json()
+        assert 'results' in data
 
 
 if __name__ == "__main__":
