@@ -8,3 +8,8 @@ uvicorn[standard]  # let pip figure out the right version based on fastapi
 gunicorn==22.0.*
 mediacloud-metadata==1.0.*
 transformers==4.51.1
+tiktoken==0.9.0
+protobuf==6.30.2
+torch==2.6.0
+sentencepiece==0.2.0
+
