@@ -7,3 +7,4 @@ fastapi[all]==0.111.*
 uvicorn[standard]  # let pip figure out the right version based on fastapi
 gunicorn==22.0.*
 mediacloud-metadata==1.0.*
+transformers==4.51.1
