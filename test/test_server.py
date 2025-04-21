@@ -25,7 +25,7 @@ class TestServer(unittest.TestCase):
 
     def test_basic(self):
         url = "https://web.archive.org/web/20221228220125/https://www.bostonglobe.com/2022/12/28/metro/more-cancellations-delays-travelers-southwest-airlines/"
-        response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH))
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=ENGLISH), timeout=5)
         data = response.json()
         assert data['status'] == 'ok'
 
@@ -44,7 +44,7 @@ class TestServer(unittest.TestCase):
         assert data['statusCode'] == 400
 
     def test_api_metadata(self):
-        response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
+        response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH), timeout=5)
         data = response.json()
         assert 'status' in data
         assert data['status'] == 'ok'
@@ -54,7 +54,7 @@ class TestServer(unittest.TestCase):
         assert data['version'] == VERSION
 
     def test_entities_from_url_spanish(self):
-        response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH))
+        response = self._client.post('/entities/from-url', data=dict(url=SPANISH_ARTICLE_URL, language=SPANISH), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -66,7 +66,7 @@ class TestServer(unittest.TestCase):
         url = "https://web.archive.org/web/20240120194229/https://www.bostonglobe.com/2022/09/27/nation/cdc-makes-masking-optional-hospitals-nursing-homes-regions-without-high-covid-transmission/"
         html_text, _ = mcmetadata.webpages.fetch(url)
         response = self._client.post('/entities/from-html', data=dict(url=ENGLISH_ARTICLE_URL, html=html_text,
-                                                                      language=ENGLISH))
+                                                                      language=ENGLISH), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -74,7 +74,7 @@ class TestServer(unittest.TestCase):
         assert data['results']['entities'][0]['type'] == 'DATE'
 
     def test_entities_from_url_english(self):
-        response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH))
+        response = self._client.post('/entities/from-url', data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -82,7 +82,7 @@ class TestServer(unittest.TestCase):
         assert data['results']['entities'][0]['type'] == 'NORP'
         assert len(data['results']['entities']) > 0
         response_with_title = self._client.post('/entities/from-url',
-                                                data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1))
+                                                data=dict(url=ENGLISH_ARTICLE_URL, language=ENGLISH, title=1), timeout=5)
         data_with_title = response_with_title.json()
         assert 'results' in data_with_title
         assert 'entities' in data_with_title['results']
@@ -90,7 +90,7 @@ class TestServer(unittest.TestCase):
 
     def test_entities_from_url_korean(self):
         url = "https://web.archive.org/web/20230514220324/https://www.donga.com/news/Economy/article/all/20230503/119113986/1"
-        response = self._client.post('/entities/from-url', data=dict(url=url, language=KOREAN))
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=KOREAN), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -116,7 +116,7 @@ class TestServer(unittest.TestCase):
 
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
-        response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH))
+        response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -127,7 +127,7 @@ class TestServer(unittest.TestCase):
             assert len(data['results']['entities']) == 100
 
     def test_domain_from_url(self):
-        response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
+        response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
@@ -136,7 +136,7 @@ class TestServer(unittest.TestCase):
         assert data['results']['domain_name'] == 'apnews.com'
 
     def test_content_from_url(self):
-        response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
+        response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL), timeout=5)
         data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
