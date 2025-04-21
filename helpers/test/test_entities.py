@@ -36,6 +36,16 @@ class TestEntities(unittest.TestCase):
             assert 'type' in e
             assert e['type'] in ['DT', 'LC', 'OG', 'PS', 'QT', 'TI']
 
+    def test_swahili(self):
+        story = json.load(open(os.path.join(this_dir, 'fixtures', 'sw_sample_story.json')))
+        entity_list = entities.from_text(story['results']['text'], story['results']['language'])
+        assert len(entity_list) == 37
+        for e in entity_list:
+            assert 'text' in e
+            assert len(e['text']) > 0
+            assert 'type' in e
+            assert e['type'] in ['DATE', 'PER', 'LOC', 'ORG']
+
 
 if __name__ == "__main__":
     unittest.main()

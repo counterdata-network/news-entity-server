@@ -7,10 +7,11 @@ import os
 import json
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, MODEL_MODE_SMALL
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, SWAHILI, MODEL_MODE_SMALL
 
 ENGLISH_ARTICLE_URL = 'https://web.archive.org/web/20240329152732/https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://web.archive.org/web/20220809180347/https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
+SWAHILI_ARTICLE_URL = 'https://web.archive.org/web/20250319080640/https://kiswahili.tuko.co.ke/watu/582633-sabina-chege-adai-kunyongwa-kwa-margaret-nduta-kumekwama-baada-ya-serikali-kuingilia-kati/'
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -99,6 +100,20 @@ class TestServer(unittest.TestCase):
         else:
             assert len(data['results']['entities']) == 171
 
+    def test_entities_from_url_swahili(self):
+        response = self._client.post(
+            '/entities/from-url', 
+            data=dict(url=SWAHILI_ARTICLE_URL, language=SWAHILI),
+            timeout=5)
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert 'modelMode' in data
+        assert data['modelMode'] == MODEL_MODE_SMALL
+        assert len(data['results']['entities']) == 37
+        assert data['results']['entities'][0]['text'] == 'Sabina Chege'
+        assert data['results']['entities'][0]['type'] == 'PER'
+
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH))
@@ -154,7 +169,7 @@ class TestServer(unittest.TestCase):
 
     def test_escape_sequences_from_url(self):
         url= "https://web.archive.org/web/20241009131438/https://musikderzeit.de/"
-        response = self._client.post('/entities/from-url', data=dict(url=url, language='de', title=1))
+        response = self._client.post('/entities/from-url', data=dict(url=url, language='de', title=1), timeout=5)
         data = response.json()
         assert 'results' in data
 
