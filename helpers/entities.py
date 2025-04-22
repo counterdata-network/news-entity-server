@@ -8,10 +8,12 @@ from helpers.exceptions import UnknownLanguageException
 
 from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
 
-def get_masakhaner_pipeline():
-    tokenizer = AutoTokenizer.from_pretrained("Davlan/xlm-roberta-large-masakhaner")
-    model = AutoModelForTokenClassification.from_pretrained("Davlan/xlm-roberta-large-masakhaner")
+
+def get_masakhaner_pipeline(hf_ner_model="Davlan/xlm-roberta-large-masakhaner"):
+    tokenizer = AutoTokenizer.from_pretrained(hf_ner_model)
+    model = AutoModelForTokenClassification.from_pretrained(hf_ner_model)
     return pipeline("ner", model=model, tokenizer=tokenizer, aggregation_strategy="simple")
+
 
 # lookup table that maps from language code to default spaCy or HuggingFace NER model
 language_nlp_lookup = {
