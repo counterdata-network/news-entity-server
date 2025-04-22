@@ -48,6 +48,10 @@ else:
     logger.info("Not logging errors to Sentry")
 
 
+# HACK: ovveride mcmetadata timeout to be longer
+mcmetadata.webpages.DEFAULT_TIMEOUT_SECS = 60*5
+
+
 @app.get("/version")
 @api_method
 def version():
