@@ -1,9 +1,9 @@
 requests  # let various other dependencies sort of the right version of this
 python-dotenv==1.0.*
-spacy==3.7.*
+spacy==3.8.*
 pytest==8.*
-sentry-sdk==2.7.*
-fastapi[all]==0.111.*
+sentry-sdk==2.26.*
+fastapi[all]==0.115.*
 uvicorn[standard]  # let pip figure out the right version based on fastapi
-gunicorn==22.0.*
-mediacloud-metadata==1.0.*
+gunicorn==23.0.*
+mediacloud-metadata==1.3.*
