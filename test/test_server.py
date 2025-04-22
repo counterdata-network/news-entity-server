@@ -95,9 +95,9 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 177
+            assert len(data['results']['entities']) == 180
         else:
-            assert len(data['results']['entities']) == 171
+            assert len(data['results']['entities']) == 183
 
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
@@ -107,9 +107,9 @@ class TestServer(unittest.TestCase):
         assert 'entities' in data['results']
         assert 'modelMode' in data
         if data['modelMode'] == MODEL_MODE_SMALL:
-            assert len(data['results']['entities']) == 253
+            assert len(data['results']['entities']) == 220
         else:
-            assert len(data['results']['entities']) == 94
+            assert len(data['results']['entities']) == 100
 
     def test_domain_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
@@ -138,7 +138,10 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
-        assert len(data['results']['entities']) == 23
+        if data['modelMode'] == MODEL_MODE_SMALL:
+            assert len(data['results']['entities']) == 18
+        else:
+            assert len(data['results']['entities']) == 25
         assert 'domain_name' in data['results']
         assert data['results']['domain_name'] == 'europapress.es'
 

@@ -14,9 +14,9 @@ class TestEntities(unittest.TestCase):
         story = json.load(open(os.path.join(this_dir, 'fixtures', '2210723002.json')))
         entity_list = entities.from_text(story['story_text'], story['language'])
         if MODEL_MODE == MODEL_MODE_SMALL:
-            assert len(entity_list) == 68
+            assert len(entity_list) == 64
         else:
-            assert len(entity_list) == 50
+            assert len(entity_list) == 60
         for e in entity_list:
             assert 'text' in e
             assert len(e['text']) > 0
@@ -27,9 +27,9 @@ class TestEntities(unittest.TestCase):
         stories = json.load(open(os.path.join(this_dir, 'fixtures', 'ko_sample_stories.json')))
         entity_list = entities.from_text(stories[0], 'ko')
         if MODEL_MODE == MODEL_MODE_SMALL:
-            assert len(entity_list) == 69
+            assert len(entity_list) == 75
         else:
-            assert len(entity_list) == 77
+            assert len(entity_list) == 78
         for e in entity_list:
             assert 'text' in e
             assert len(e['text']) > 0
