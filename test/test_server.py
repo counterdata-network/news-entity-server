@@ -116,6 +116,19 @@ class TestServer(unittest.TestCase):
         assert data['results']['entities'][0]['text'] == 'Sabina Chege'
         assert data['results']['entities'][0]['type'] == 'PER'
 
+    def test_entities_from_url_swahili(self):
+        response = self._client.post(
+            '/entities/from-url', 
+            data=dict(url=SWAHILI_ARTICLE_URL, language=SWAHILI),
+            timeout=REQUEST_TIMEOUT)
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert 'modelMode' in data
+        assert len(data['results']['entities']) == 37
+        assert data['results']['entities'][0]['text'] == 'Sabina Chege'
+        assert data['results']['entities'][0]['type'] == 'PER'
+
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH), timeout=REQUEST_TIMEOUT)
