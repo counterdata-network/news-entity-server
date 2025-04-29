@@ -3,14 +3,17 @@ import time
 
 import mcmetadata.content
 from fastapi.testclient import TestClient
+from httpx import Timeout
 import os
 import json
 
 from server import app
-from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, MODEL_MODE_SMALL
+from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, SWAHILI, MODEL_MODE_SMALL
+
 
 ENGLISH_ARTICLE_URL = 'https://web.archive.org/web/20240329152732/https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://web.archive.org/web/20220809180347/https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
+SWAHILI_ARTICLE_URL = 'https://web.archive.org/web/20250319080640/https://kiswahili.tuko.co.ke/watu/582633-sabina-chege-adai-kunyongwa-kwa-margaret-nduta-kumekwama-baada-ya-serikali-kuingilia-kati/'
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -63,9 +66,9 @@ class TestServer(unittest.TestCase):
 
     def test_entities_from_html_english(self):
         url = "https://web.archive.org/web/20240120194229/https://www.bostonglobe.com/2022/09/27/nation/cdc-makes-masking-optional-hospitals-nursing-homes-regions-without-high-covid-transmission/"
-        html_text, _ = mcmetadata.webpages.fetch(url)
+        html_text, _ = mcmetadata.webpages.fetch(url, timeout=10)
         response = self._client.post('/entities/from-html', data=dict(url=ENGLISH_ARTICLE_URL, html=html_text,
-                                                                      language=ENGLISH))
+                                                                      language=ENGLISH), )
         data = response.json()
         assert 'results' in data
         assert 'entities' in data['results']
@@ -98,6 +101,32 @@ class TestServer(unittest.TestCase):
             assert len(data['results']['entities']) == 180
         else:
             assert len(data['results']['entities']) == 183
+
+    def test_entities_from_url_swahili(self):
+        response = self._client.post(
+            '/entities/from-url', 
+            data=dict(url=SWAHILI_ARTICLE_URL, language=SWAHILI),
+            )
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert 'modelMode' in data
+        assert len(data['results']['entities']) == 37
+        assert data['results']['entities'][0]['text'] == 'Sabina Chege'
+        assert data['results']['entities'][0]['type'] == 'PER'
+
+    def test_entities_from_url_swahili(self):
+        response = self._client.post(
+            '/entities/from-url', 
+            data=dict(url=SWAHILI_ARTICLE_URL, language=SWAHILI),
+            )
+        data = response.json()
+        assert 'results' in data
+        assert 'entities' in data['results']
+        assert 'modelMode' in data
+        assert len(data['results']['entities']) == 37
+        assert data['results']['entities'][0]['text'] == 'Sabina Chege'
+        assert data['results']['entities'][0]['type'] == 'PER'
 
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
