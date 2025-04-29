@@ -97,3 +97,10 @@ To release a tagged version:
 docker build -t rahulbot/news-entity-server:2.4.2 .
 docker push rahulbot/news-entity-server:2.4.2
 ```
+
+Contributors
+------------
+
+* Rahul Bhargava
+* Sybille Légitime
+* Karabo Kakopo
