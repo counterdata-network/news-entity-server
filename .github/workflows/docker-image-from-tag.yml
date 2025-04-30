@@ -1,7 +1,9 @@
-name: Docker Image CI Tests
+name: Docker Image - Automated From Tag
 
 on:
-  workflow_dispatch
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
 
@@ -53,7 +55,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/news-entity-server:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/news-entity-server:${{github.ref_name}}
           # Use GitHub Actions cache
           cache-from: type=gha
           cache-to: type=gha,mode=max
