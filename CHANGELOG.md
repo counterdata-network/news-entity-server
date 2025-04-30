@@ -1,6 +1,10 @@
 Version History
 ===============
 
+### v2.5.1
+
+* Automated build tweaks for DockerHub release
+
 ### v2.5.0
 
 * Add Swahili support
