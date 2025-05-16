@@ -2,9 +2,12 @@ import os
 import requests
 import zipfile
 import logging
+from elasticsearch import Elasticsearch
 
 from urllib.parse import urlparse
-from ..helpers.geo.geonames import GEONAMES_URLS
+from helpers.geo.geonames import GEONAMES_URLS
+from helpers.geo import INDEX_NAME
+from helpers.geo.index import create_elasticsearch_index, index_geonames_data
 
 
 logging.basicConfig(level=logging.INFO,
@@ -49,8 +52,14 @@ def download_and_extract(geonames_url: str) -> str:
 if __name__ == "__main__":
     try:
         logger.info("Fetching GeoNames data...")
-        for url in GEONAMES_URLS:
-            downloaded_file_path = download_and_extract(url)
-            logger.info(f"  data at: {downloaded_file_path}")
+        downloaded_file_path = download_and_extract(GEONAMES_URLS)
+        logger.info(f"  data at: {downloaded_file_path}")
+        logger.info("Creating index...")
+        es_client = Elasticsearch([os.getenv("ES_SERVER")])
+        create_elasticsearch_index(es_client, INDEX_NAME)
+        logger.info(f"  empty index at f{INDEX_NAME}")
+        logger.info("Indexing geonames data...")
+        success, failed = index_geonames_data(es_client, INDEX_NAME, downloaded_file_path)
+        logger.info(f"  indexed f{success}, f{len(failed)} failed")
     except Exception as e:
         logger.exception(e)
