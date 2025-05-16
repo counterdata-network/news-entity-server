@@ -2,7 +2,7 @@
 from elasticsearch.helpers import bulk
 import logging
 
-from .geonames import parse_geonames_file
+from .geonames import parse_all_countries_file
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ def index_geonames_data(es_client, index_name, file_path):
     # Stream documents to Elasticsearch
     success, failed = bulk(
         es_client,
-        parse_geonames_file(file_path, index_name),
+        parse_all_countries_file(file_path, index_name),
         chunk_size=1000,
         max_retries=3,
         request_timeout=60

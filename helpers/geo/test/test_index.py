@@ -1,10 +1,9 @@
 from unittest import TestCase
 from elasticsearch import Elasticsearch
 import time
+from . import ALL_COUNTRIES_FIXTURE_PATH
 from ..index import create_elasticsearch_index, index_geonames_data
 import os
-
-geo_test_basedir = os.path.dirname(__file__)
 
 
 class IndexTest(TestCase):
@@ -28,8 +27,7 @@ class IndexTest(TestCase):
         assert self._es.indices.exists(index=self.INDEX_NAME)
 
     def test_index_geonames_data(self):
-        all_countries_fixture_path = os.path.join(geo_test_basedir, "fixtures", "allCountries.txt")
-        success, failed = index_geonames_data(self._es, self.INDEX_NAME, all_countries_fixture_path)
+        success, failed = index_geonames_data(self._es, self.INDEX_NAME, ALL_COUNTRIES_FIXTURE_PATH)
         assert success == 100
         assert len(failed) == 0
         # test search by id

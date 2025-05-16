@@ -1,16 +1,13 @@
 import csv
 import logging
-from dateutil.parser import parse
 
 
 logger = logging.getLogger(__name__)
 
-GEONAMES_URLS = [
-    "https://download.geonames.org/export/dump/allCountries.zip",
-]
+GEONAMES_URLS = "https://download.geonames.org/export/dump/allCountries.zip"
 
 
-def parse_geonames_file(file_path, index_name):
+def parse_all_countries_file(file_path, index_name):
     columns = [
         "geonameid",  "name",  "asciiname",  "alternatenames",  "latitude",  "longitude",  "feature_class",
         "feature_code",  "country_code",  "cc2",  "admin1_code",  "admin2_code",  "admin3_code",  "admin4_code",
