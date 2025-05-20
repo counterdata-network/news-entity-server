@@ -6,9 +6,8 @@ from elasticsearch import Elasticsearch
 
 from urllib.parse import urlparse
 from helpers.geo.geonames import GEONAMES_URLS
-from helpers.geo import INDEX_NAME
+from helpers.geo import INDEX_NAME, index_client
 from helpers.geo.index import create_elasticsearch_index, index_geonames_data
-
 
 logging.basicConfig(level=logging.INFO,
                     format="[%(asctime)s][%(levelname)s] %(name)s %(filename)s | %(message)s")
@@ -55,7 +54,7 @@ if __name__ == "__main__":
         downloaded_file_path = download_and_extract(GEONAMES_URLS)
         logger.info(f"  data at: {downloaded_file_path}")
         logger.info("Creating index...")
-        es_client = Elasticsearch([os.getenv("ES_SERVER")])
+        es_client = index_client()
         create_elasticsearch_index(es_client, INDEX_NAME)
         logger.info(f"  empty index at f{INDEX_NAME}")
         logger.info("Indexing geonames data...")

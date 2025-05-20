@@ -22,7 +22,7 @@ load_dotenv()
 VERSION = '2.5.1'
 
 # setup logging
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     format="[%(asctime)s][%(levelname)s] %(name)s %(filename)s:%(funcName)s:%(lineno)d | %(message)s")
 logger = logging.getLogger(__name__)
 logger.info("---------------------------------------------------------------------------")

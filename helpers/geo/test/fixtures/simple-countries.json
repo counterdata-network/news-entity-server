@@ -1,0 +1,22 @@
+[
+  { "expected": "US", "text": "This is about the United States." },
+  { "expected": "RU", "text": "This is about Russia." },
+  { "expected": "CN", "text": "This is about China and its growing economy." },
+  { "expected": "BR", "text": "This is about Brazil and the Amazon rainforest." },
+  { "expected": "IN", "text": "This is about India and its diverse culture." },
+  { "expected": "JP", "text": "This is about Japan and its technological advancements." },
+  { "expected": "DE", "text": "This is about Germany and its automotive industry." },
+  { "expected": "FR", "text": "This is about France and its culinary traditions." },
+  { "expected": "UK", "text": "This is about the United Kingdom and its historical landmarks." },
+  { "expected": "CA", "text": "This is about Canada and its natural resources." },
+  { "expected": "AU", "text": "This is about Australia and its unique wildlife." },
+  { "expected": "ZA", "text": "This is about South Africa and its diverse ecosystems." },
+  { "expected": "MX", "text": "This is about Mexico and its rich cultural heritage." },
+  { "expected": "IT", "text": "This is about Italy and its Renaissance art." },
+  { "expected": "ES", "text": "This is about Spain and its famous festivals." },
+  { "expected": "AR", "text": "This is about Argentina and its passion for football." },
+  { "expected": "EG", "text": "This is about Egypt and its ancient pyramids." },
+  { "expected": "NG", "text": "This is about Nigeria and its booming film industry." },
+  { "expected": "SA", "text": "This is about Saudi Arabia and its oil production." },
+  { "expected": "TR", "text": "This is about Turkey and its strategic location between Europe and Asia." }
+]

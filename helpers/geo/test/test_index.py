@@ -6,7 +6,7 @@ from ..index import create_elasticsearch_index, index_geonames_data
 import os
 
 
-class IndexTest(TestCase):
+class IndexInitTest(TestCase):
 
     INDEX_NAME = "test_geonames"
 
@@ -50,11 +50,11 @@ class IndexTest(TestCase):
         time.sleep(1)
         # search for the matching docs where "alternate" is PLACE_NAME
         ALERTNATE_PLACE_ID = '3038886'
-        ALERTNATE_PLACE_NAME = "Pic de Tristagne"
+        ALTERNATE_PLACE_NAME = "Pic de Tristagne"
         res = self._es.search(index=self.INDEX_NAME, body={
             "query": {
                 "match": {
-                    "alternatenames": ALERTNATE_PLACE_NAME
+                    "alternatenames": ALTERNATE_PLACE_NAME
                 }
             }
         })

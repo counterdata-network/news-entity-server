@@ -54,7 +54,16 @@ def create_elasticsearch_index(es_client, index_name):
         mappings=mappings,
         settings={
             "number_of_shards": 1,
-            "number_of_replicas": 0
+            "number_of_replicas": 0,
+            "analysis": {
+                "analyzer": {
+                    "lowercase": {
+                        "type": "custom",
+                        "tokenizer": "standard",
+                        "filter": ["lowercase"]
+                    }
+                }
+            }
         }
     )
     logger.info(f"  Index {index_name} created successfully")
