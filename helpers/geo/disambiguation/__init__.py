@@ -1,9 +1,9 @@
 from typing import List
-from ..models import LocationCandidate
+from ..locations import ResolvedLoc, ResolvedCandidates
 import helpers.geo.disambiguation.strategies as strategies
 
 
-def disambiguate(all_candidates: List[List[LocationCandidate]]) -> List[LocationCandidate]:
+def disambiguate(all_candidates: List[ResolvedCandidates]) -> List[ResolvedLoc]:
     best_candidates = []  # one per entity
     strategies.large_area_pass(all_candidates, best_candidates)
     strategies.fuzzy_matched_countries_pass(all_candidates, best_candidates)

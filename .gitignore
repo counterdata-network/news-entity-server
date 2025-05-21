@@ -6,3 +6,4 @@ test/__pycache__
 my.secrets
 tmp/*.txt
 tmp/*.zip
+.DS_Store

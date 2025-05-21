@@ -61,5 +61,6 @@ class IndexInitTest(TestCase):
         assert len(res['hits']['hits']) == 7
         assert res['hits']['hits'][0]['_source']['geonameid'] == ALERTNATE_PLACE_ID
 
+
     def tearDown(self):
         self._es.indices.delete(index=self.INDEX_NAME)

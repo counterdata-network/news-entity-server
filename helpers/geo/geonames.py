@@ -1,13 +1,13 @@
 import csv
 import logging
-from .models import LocationCandidate
+from .locations import ResolvedLoc
 from typing import Dict, List
 from . import INDEX_NAME
 
 logger = logging.getLogger(__name__)
 
 GEONAMES_URLS = "https://download.geonames.org/export/dump/allCountries.zip"
-RESULT_COUNT = 100
+RESULT_COUNT = 10
 
 
 def parse_all_countries_file(file_path, index_name):
@@ -55,53 +55,81 @@ def parse_all_countries_file(file_path, index_name):
             }
 
 
-def matching_places(index, entity: Dict) -> List[LocationCandidate]:
+def matching_places(index, entity: Dict) -> List[ResolvedLoc]:
     entity_name = entity['text'].strip().lower()
     if len(entity_name) == 0:
         return []
 
     candidates = []
-    # search for exact match
+    # Combined search: match entity_name in both 'name' and 'alternatenames', boost 'name' matches higher
     res = index.search(index=INDEX_NAME, body={
         "size": RESULT_COUNT,
         "query": {
-            "match": {
-                "name": {
-                    "query": entity_name,
-                    "analyzer": "lowercase"
-                }
+            "function_score": {
+                "query": {
+                    "bool": {
+                        "should": [
+                            {
+                                "match": {
+                                    "name": {
+                                        "query": entity_name,
+                                        "analyzer": "lowercase",
+                                    }
+                                }
+                            },
+                            {
+                                "term": {
+                                    "name.keyword": {
+                                        "value": entity_name,
+                                        "boost": 10  # High boost for exact match
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                "boost_mode": "sum",
+                "score_mode": "sum",
+                "functions": [
+                    {
+                        "field_value_factor": {
+                            "field": "population",
+                            "factor": 1,
+                            "modifier": "log1p",
+                            "missing": 0
+                        }
+                    },
+                    {
+                        "filter": {
+                            "term": {
+                                "admin1_code": "00"
+                            }
+                        },
+                        "weight": 2  # Adjust this weight as needed for the boost
+                    },
+                    {
+                        "filter": {
+                            "terms": {
+                                "feature_class": ["P", "A"]
+                            }
+                        },
+                        "weight": 1.5  # Slight boost for feature_class P or A
+                    }
+                ]
             }
-        },
-        "sort": [
-            {"_score": {"order": "desc"}},
-            {"population": {"order": "desc"}}
-        ]
+        }
     })
     if res['hits']['total']['value'] > 0:
         for hit in res['hits']['hits']:
-            candidate = LocationCandidate(**hit['_source'], name_match=True, score=hit['_score'],
-                                          exact_match=hit['_source']['name'].lower() == entity_name.lower())
-            candidates.append(candidate)
-    # search for the matching docs where "alternate" is PLACE_NAME
-    res = index.search(index=INDEX_NAME, body={
-        "size": RESULT_COUNT,
-        "query": {
-            "match": {
-                "alternatenames": {
-                    "query": entity_name,
-                    "analyzer": "lowercase"
-                }
-            }
-        },
-        "sort": [
-            {"_score": {"order": "desc"}},
-            {"population": {"order": "desc"}}
-        ]
-    })
-    if res['hits']['total']['value'] > 0:
-        for hit in res['hits']['hits']:
-            lowercase_alternate_names = [name.lower() for name in hit['_source']['alternatenames']]
-            candidate = LocationCandidate(**hit['_source'], alternate_name_match=True, score=hit['_score'],
-                                          exact_match=entity_name.lower() in lowercase_alternate_names)
+            src = hit['_source']
+            name_match = src['name'].lower() == entity_name.lower()
+            alternate_name_match = entity_name.lower() in [n.lower() for n in src.get('alternatenames', [])]
+            candidate = ResolvedLoc(
+                **src,
+                name_match=name_match,
+                alternate_name_match=alternate_name_match,
+                score=hit['_score'],
+                exact_match=name_match or alternate_name_match
+            )
             candidates.append(candidate)
     return candidates

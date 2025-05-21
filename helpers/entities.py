@@ -1,5 +1,7 @@
 import spacy
 from typing import List, Dict
+import os
+import csv
 
 from helpers import ENGLISH, SPANISH, PORTUGUESE, FRENCH, GERMAN, KOREAN, SWAHILI, MODEL_MODE_SMALL, MODEL_MODE
 import helpers.custom.ages as ages
@@ -8,6 +10,10 @@ from helpers.exceptions import UnknownLanguageException
 
 from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
 
+
+GEO_ENTITY_TYPES = ['GPE', 'NORP', 'LOC']
+
+_token_type_overrides = None
 
 def get_masakhaner_pipeline(hf_ner_model="Davlan/xlm-roberta-large-masakhaner"):
     tokenizer = AutoTokenizer.from_pretrained(hf_ner_model)
@@ -41,6 +47,9 @@ def from_text(text: str, language_code: str) -> List[Dict]:
     else:
         doc = nlp(text)
         entities = _entities_as_dict(doc)
+    for e in entities:
+        e['synthetic'] = False
+    entities += token_overrides(entities)
 
     entities += ages.extract_ages(text, lang)
     entities += dates.extract_dates(text, lang)
@@ -66,7 +75,42 @@ def _huggingface_entities_as_dict(ner_results) -> List[Dict]:
             "text": ent["word"],
             "type": ent["entity_group"],
             "start_char": ent["start"],
-            "end_char": ent["end"]
+            "end_char": ent["end"],
         })
     return entities
 
+
+def token_overrides(entities: List[Dict]) -> List[Dict]:
+    """
+    Add in any tokens that we want to force to interpret in a certain way. This can be helpful for things
+    like
+    :param entities:
+    :return:
+    """
+    global _token_type_overrides
+    if _token_type_overrides is None:
+        _token_type_overrides = _get_type_overrides()
+    additions = []
+    for e in entities:
+        desired_type = _token_type_overrides.get(e['text'], None)
+        if desired_type:
+            additions.append({**e, "type": desired_type, "synthetic": True, "original_type": e['type']})
+    return additions
+
+
+def _get_type_overrides() -> Dict[str, str]:
+    """
+    Return a list of strings and what type they should be replicated to. This can be helpful to make "Chelsea" shows up
+    as both a PERSON and a GPE type.
+    :return:
+    """
+    text2type = {}
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(this_dir, 'data', 'entity-type-forcing.csv')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            token = row.get('token').strip()
+            type = row.get('type').strip()
+            text2type[token] = type
+    return text2type

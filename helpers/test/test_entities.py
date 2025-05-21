@@ -46,6 +46,22 @@ class TestEntities(unittest.TestCase):
             assert 'type' in e
             assert e['type'] in ['DATE', 'PER', 'LOC', 'ORG']
 
+    def test_type_forcing(self):
+        text = "This is about Chelsea the place in London."
+        entity_list = entities.from_text(text, 'en')
+        assert len(entity_list) == 3
+        assert entity_list[0]['text'] == "Chelsea"
+        assert entity_list[0]['type'] == "ORG"
+        assert entity_list[0]['synthetic'] is False
+        assert entity_list[1]['text'] == "London"
+        assert entity_list[1]['type'] == "GPE"
+        assert entity_list[1]['synthetic'] is False
+        assert entity_list[2]['text'] == "Chelsea"
+        assert entity_list[2]['type'] == "GPE"
+        assert entity_list[2]['synthetic'] is True
+        assert entity_list[2]['original_type'] == "ORG"
+        assert len(entity_list) > 0
+
 
 if __name__ == "__main__":
     unittest.main()

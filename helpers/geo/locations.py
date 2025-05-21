@@ -1,4 +1,7 @@
-class LocationCandidate:
+from typing import Dict, List
+
+
+class ResolvedLoc:
     def __init__(self, **kwargs):
         self.geoname_id = kwargs.get("geonameid")
         self.name = kwargs.get("name")
@@ -26,6 +29,7 @@ class LocationCandidate:
         self.alternate_name_match = kwargs.get("alternate_name_match", False)
         self.score = kwargs.get("score", 0)
         self.usage_count = 0
+        self.entities = []
 
     def exact_match_to_admin1_code(self) -> bool:
         return self.name == self.admin1_code
@@ -51,8 +55,18 @@ class LocationCandidate:
     def is_large_area(self) -> bool:
         return self.feature_class == 'L'
 
+    def add_entity(self, entity: Dict):
+        self.entities.append(entity.copy())
+
     def __repr__(self):
         return (
             f"<LocationCandidate(geonameid={self.geoname_id}, name={self.name}, "
-            f"country_code={self.country_code}) used={self.usage_count} >"
+            f"country_code={self.country_code}) score={self.score} used={self.usage_count} >"
         )
+
+
+class ResolvedCandidates:
+
+    def __init__(self, entity: Dict, candidates: List[ResolvedLoc]):
+        self.entity = entity
+        self.candidates = candidates
