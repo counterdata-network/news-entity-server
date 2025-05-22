@@ -1,4 +1,195 @@
 Country,Adjectival,Demonym
+Country,Adjectival,Demonym
+Andorra,"Andorran, Andorrans",Andorran
+United Arab Emirates,"Emirian, Emirians",Emirati
+Afghanistan,"Afghani, Afghanis",Afghan
+Antigua and Barbuda,"Antiguan, Antiguans",Antiguan
+Anguilla,"Anguillan, Anguillans",Anguillan
+Albania,"Albanian, Albanians",Alabanian
+Armenia,"Armenian, Armenians",Hayastani
+Angola,"Angolan, Angolans",Angolan
+Antarctica,"Antarctic, Antarctics",Antarctic
+Argentina,"Argentine, Argentines","Argentinian, Argentinean"
+American Samoa,"Samoan, Samoans",Samoan
+Austria,"Austrian, Austrians",Austrian
+Australia,"Australian, Australians",Australian
+Aruba,"Arubian, Arubians",Arubian
+Åland Islands,"Ålandic, Ålandics",Ålandish
+Azerbaijan,"Azerbaijani, Azerbaijanis",Azerbaijani
+Bosnia and Herzegovina,"Bosnian, Bosnians",Herzegovinian
+Barbados,"Barbadian, Barbadians","Barbadan, Bajan"
+Bangladesh,"Bangladeshi, Bangladeshis",Bangladeshi
+Belgium,"Belgian, Belgians",Belgian
+Burkina Faso,"Burkinabe, Burkinabe",Burkinabe
+Bulgaria,"Bulgarian, Bulgarians",Bulgarian
+Bahrain,"Bahrainian, Bahrainians",Bahrainian
+Burundi,"Burundian, Burundians",Burundian
+Benin,"Beninese, Beninese",Beninese
+Saint Barthélemy,"Barthélemois, Barthélemoises",Barthélemois
+Bermuda,"Bermudan, Bermudans",Bermudan
+Brunei,"Bruneian, Bruneians",Bruneian
+Bolivia,"Bolivian, Bolivians",Bolivian
+Caribbean Netherlands,,
+Brazil,"Brazilian, Brazilians",Brazilian
+Bahamas,"Bahameese, Bahameese",Bahamian
+Bhutan,"Bhutanese, Bhutanese",Bhutanese
+Bouvet Island,,
+Botswana,"Motswana, Motswanas",Batswana
+Belarus,"Belarusian, Belarusians",Belarusian
+Belize,"Belizean, Belizeans",Belizean
+Canada,"Canadian, Canadians",Canadian
+Cocos (Keeling) Islands,"Cocossian, Cocossians",Cocos Islandia
+Democratic Republic of the Congo,"Congolese, Congolese",Congolese
+Central African Republic,"Central African, Central Africans",Central African
+Congo (Republic of),"Congolese, Congolese",Congolese
+Switzerland,"Swiss, Swiss",Swiss
+Côte d'Ivoire (Ivory Coast),"Ivorian, Ivorians",Ivorian
+Cook Islands,"Cook Islander, Cook Islanders",Cook Islander
+Chile,"Chilean, Chileans",Chilean
+Cameroon,"Cameroonian, Cameroonians",Cameroonian
+China,"Chinese, Chinese",Chinese
+Colombia,"Colombian, Colombians",Columbian
+Costa Rica,"Costa Rican, Costa Ricans",Costa Rican
+Cuba,"Cuban, Cubans",Cuban
+Cape Verde,"Cape Verdean, Cape Verdeans",Cape Verdean
+Curaçao,"Curaçaoan, Curaçaoans",Curaçaoan
+Christmas Island,"Christmas Islander, Christmas Islanders",Christmas Islander
+Cyprus,"Cypriot, Cypriots",Cypriot
+Czech Republic,"Czech, Czechs",Czech
+Germany,"German, Germans",German
+Djibouti,"Djiboutian, Djiboutians",Djibouti
+Denmark,"Danish, Danes",Dane
+Dominica,"Dominican, Dominicans",Dominican
+Dominican Republic,"Dominican, Dominicans",Dominican
+Algeria,"Algerian, Algerians",Algerian
+Ecuador,"Ecuadorean, Ecuadoreans",Ecudorean
+Estonia,"Estonian, Estonians",Estonian
+Egypt,"Egyptian, Egyptians",Egyptian
+Western Saharan,"Western Saharan, Western Saharans",Sahrawi
+Eritrea,"Eritrean, Eritreans",Eritrean
+Spain,"Spanish, Spanish",Spanish
+Ethiopia,"Ethiopian, Ethiopians",Ethiopian
+Finland,"Finnish, Finnish",Finnish
+Fiji,"Fijian, Fijians",Fijian
+Falkland Islands,"Falkland Islander, Falkland Islanders",Falkland Islander
+Micronesia,"Micronesian, Micronesians",Micronesian
+Faroe Islands,"Faroese, Faroese",Faroese
+France,"French, French",French
+Gabon,"Gabonese, Gabonese",Gabonese
+United Kingdom,"British, British",British
+Grenada,"Grenadian, Grenadians",Grenadian
+Georgia,"Georgian, Georgians",Georgian
+French Guiana,"French Guianese, French Guianese",French Guianese
+Guernsey,,
+Ghana,"Ghanaian, Ghanaians",Ghanian
+Gibraltar,"Gibraltarian, Gibraltarians",Gibraltarian
+Greenland,"Greenlander, Greenlanders",Greenlandic
+Gambia,"Gambian, Gambians",Gambian
+Guinea,"Guinean, Guineans",Guinean
+Guadeloupe,"Guadeloupean, Guadeloupeans",Guadeloupean
+Equatorial Guinea,"Equatorial Guinean, Equatorial Guineans",Equatoguinean
+Greece,"Greek, Greeks",Greek
+South Georgia and the South Sandwich Islands,,
+Guatemala,"Guatemalan, Guatemalans",Guatemalan
+Guam,"Guamanian, Guamanians",Guamanian
+Guinea-Bissau,"Guinean, Guineans",Guinean
+Guyana,"Guyanese, Guyanese",Guyanese
+Hong Kong,"Hong Konger, Hong Kongers",Hong Konger
+Heard and McDonald Islands,,
+Honduras,"Honduran, Hondurans",Honduran
+Croatia,"Croatian, Croatians",Croat
+Haiti,"Haitian, Haitians",Haitian
+Hungary,"Hungarian, Hungarians",Hungarian
+Indonesia,"Indonesian, Indonesians",Indonesian
+Ireland,"Irish, Irish",Irish
+Israel,"Israeli, Israelis",Israeli
+Isle of Man,"Manx, Manx",Manx
+India,"Indian, Indians",Indian
+British Indian Ocean Territory,,
+Iraq,"Iraqi, Iraqis",Iraqi
+Iran,"Iranian, Iranians",Iranian
+Iceland,"Icelander, Icelanders",Icelander
+Italy,"Italian, Italians, Itali",Italian
+Jersey,,
+Jamaica,"Jamaican, Jamaicans",Jamaican
+Jordan,"Jordanian, Jordanians",Jordanian
+Japan,"Japanese, Japanese",Japanese
+Kenya,"Kenyan, Kenyans",Kenyan
+Kyrgyzstan,"Kyrgyzstani, Kyrgyzstanis",Kyrgyzstani
+Cambodia,"Cambodian, Cambodians",Cambodian
+Kiribati,"I-Kiribati, I-Kiribati",I-Kiribati
+Comoros,"Comoran, Comorans",Comoran
+Saint Kitts and Nevis,"Kittian, Kittians",Nevisian
+North Korea,"North Korean, North Koreans",North Korean
+South Korea,"South Korean, South Koreans",South Korean
+Kuwait,"Kuwaiti, Kuwaitis",Kuwaiti
+Cayman Islands,"Caymanian, Caymanians",Caymanian
+Kazakhstan,"Kazakhstani, Kazakhstanis",Kazakh
+Laos,"Laotian, Laotians",Laotian
+Lebanon,"Lebanese, Lebanese",Lebanese
+Saint Lucia,"Saint Lucian, Saint Lucians",Saint Lucian
+Liechtenstein,"Liechtensteiner, Liechtensteiners",Liechtensteiner
+Sri Lanka,"Sri Lankan, Sri Lankans",Sri Lankan
+Liberia,"Liberian, Liberians",Liberian
+Lesotho,"Mosotho, Mosothos",Basotho
+Lithuania,"Lithunian, Lithunians",Lithunian
+Luxembourg,"Luxembourger, Luxembourgers",Luxembourger
+Latvia,"Latvian, Latvians",Latvian
+Libya,"Libyan, Libyans",Libyan
+Morocco,"Moroccan, Moroccans",Moroccan
+Monaco,"Monacan, Monacans",Monacan
+Moldova,"Moldovan, Moldovans",Moldovan
+Montenegro,"Montenegrin, Montenegrins",Montenegrin
+Saint Martin (France),,
+Madagascar,"Malagasy, Malagasies",Malagasy
+Marshall Islands,"Marshallese, Marshallese",Marshallese
+Macedonia,"Macedonian, Macedonians",Macedonian
+Mali,"Malian, Malians",Malian
+Burma (Republic of the Union of Myanmar),"Myanmarese, Myanmarese",Burmese
+Mongolia,"Mongolian, Mongolians",Mongolian
+Macau,"Macanese, Macanese",Macanese
+Northern Mariana Islands,"Northern Mariana Islander, Northern Mariana Islanders",Northern Mariana Islander
+Martinique,"Martinican, Martinicans",Martiniquaís
+Mauritania,"Mauritanian, Mauritanians",Mauritanian
+Montserrat,"Montserratian, Montserratians",Montserratian
+Malta,"Maltese, Maltese",Maltese
+Mauritius,"Mauritian, Mauritians",Mauritian
+Maldives,"Maldivan, Maldivans",Maldivan
+Malawi,"Malawian, Malawians",Malawian
+Mexico,"Mexican, Mexicans",Mexican
+Malaysia,"Malaysian, Malaysians",Malaysian
+Mozambique,"Mozambican, Mozambicans",Mozambican
+Namibia,"Namibian, Namibians",Namibian
+New Caledonia,"New Caledonian, New Caledonians",New Caledonians
+Niger,"Nigerien, Nigeriens",Nigerien
+Norfolk Island,"Norfolk Islander, Norfolk Islanders",Norfolk Islander
+Nigeria,"Nigerian, Nigerians",Nigerian
+Nicaragua,"Nicaraguan, Nicaraguans",Nicoya
+Netherlands,"Dutch, Dutch",Dutch
+Norway,"Norwegian, Norwegians",Norwegian
+Nepal,"Nepalese, Nepalese",Nepalese
+Nauru,"Nauruan, Nauruans",Nauruan
+Niue,"Niuean, Niueans",Niuean
+New Zealand,"New Zealander, New Zealanders",New Zealander
+Oman,"Omani, Omanis",Omani
+Panama,"Panamanian, Panamanians",Panamanian
+Peru,"Peruvian, Peruvians",Peruvian
+French Polynesia,"French Polynesian, French Polynesians",French Polynesian
+Papua New Guinea,"Papua New Guinean, Papua New Guineans",Papua New Guinean
+Philippines,"Filipino, Filipinos",Filipino
+Pakistan,"Pakistani, Pakistanis",Pakistani
+Poland,"Polish, Poles",Pole
+St. Pierre and Miquelon,"Saint-Pierrais, Saint-Pierraises",Miquelonnais
+Pitcairn,"Pitcairn Islander, Pitcairn Islanders",Pitcairn Islander
+Puerto Rico,"Puerto Rican, Puerto Ricans",Puerto Rican
+Palestine,"Palestinian, Palestinians",Palestinian
+Portugal,"Portuguese, Portuguese",Portugese
+Palau,"Palauan, Palauans",Palauan
+Paraguay,"Paraguayan, Paraguayans",Paraguayan
+Qatar,"Qatari, Qataris",Qatari
+Réunion,,
+Romania,"Romanian, Romanians",Romanian
+Serbia,"Serbian, Serbians",Serb
 Russian Federation,"Russian, Russians",Russian
 Rwanda,"Rwandan, Rwandans",Rwandese
 Saudi Arabia,"Saudi Arabian, Saudi Arabians",Saudi

@@ -64,10 +64,12 @@ class TestResolver(TestCase):
         assert subs.get('ukrainian') == 'Ukraine'
 
     def test_local_article(self):
+        # https://www.bostonglobe.com/2022/05/24/business/racial-justice-is-heart-dispute-over-gig-drivers-rights/
         self._test_manually_coded(
             os.path.join(this_dir, 'fixtures', 'local_story.txt'),
             os.path.join(this_dir, 'fixtures', 'local_story.csv')
         )
+
 
 """
     # this does well, but doesn't work yet

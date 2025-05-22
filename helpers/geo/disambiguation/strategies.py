@@ -35,7 +35,7 @@ def fuzzy_matched_countries_pass(all_candidate_lists: List[ResolvedCandidates], 
     to_remove = []
     for entity_candidate_set in all_candidate_lists:
         entity_candidates = entity_candidate_set.candidates
-        country_candidate = util.first_country(entity_candidates)
+        country_candidate = util.first_country(entity_candidates[:3])  # subjective threshold of top 3
         if country_candidate:
             logger.debug(f"fuzzy_matched_countries_pass: picked {country_candidate}")
             _add_or_increment(entity_candidate_set.entity, country_candidate, resolved_locs, stage_name)
