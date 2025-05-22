@@ -9,7 +9,10 @@ from .import index_client
 
 GEO_ENTITY_TYPES = ['GPE', 'NORP', 'LOC']
 
+this_dir = os.path.dirname(os.path.abspath(__file__))
+
 _replacements = None
+_ignore_list = None
 
 
 def disambiguated_locations(entities: List[Dict]) -> List[Dict]:
@@ -29,7 +32,10 @@ def _resolve(entities: List[Dict]) -> List[ResolvedLoc]:
     index = index_client()
     all_candidates = []
     substitutions = replacement_map()
+    ignores = ignore_list()
     for entity in geo_entities:
+        if entity['text'].lower() in ignores:
+            continue
         replacement = substitutions.get(entity['text'].lower(), None)
         if replacement:
             entity['substitution'] = True
@@ -45,6 +51,13 @@ def _resolve(entities: List[Dict]) -> List[ResolvedLoc]:
     return best_candidates
 
 
+def ignore_list() -> List:
+    global _ignore_list
+    if _ignore_list is None:  # load it like a singleton
+        _ignore_list = _load_ignore_list()
+    return _ignore_list
+
+
 def replacement_map() -> Dict[str, str]:
     global _replacements
     if _replacements is None:  # load it like a singleton
@@ -56,7 +69,6 @@ def replacement_map() -> Dict[str, str]:
 
 def _load_demomnyms() -> Dict[str, str]:
     replacement_map = {}
-    this_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(this_dir, 'data', 'country-adjectivals-demonyms.csv')
     with open(file_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -75,7 +87,6 @@ def _load_demomnyms() -> Dict[str, str]:
 
 def _load_custom_substitutions() -> Dict[str, str]:
     replacement_map = {}
-    this_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(this_dir, 'data', 'custom-substitutions.csv')
     with open(file_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -85,3 +96,11 @@ def _load_custom_substitutions() -> Dict[str, str]:
             if name and replacement:
                 replacement_map[name.lower().strip()] = replacement.strip()
     return replacement_map
+
+def _load_ignore_list() -> List:
+    ignore_list = []
+    file_path = os.path.join(this_dir, 'data', 'ignore-list.txt')
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            ignore_list.append(line.strip())
+    return ignore_list
