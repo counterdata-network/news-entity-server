@@ -41,7 +41,6 @@ class ResolvedLoc:
             count=self.usage_count,
             details=dict(
                 ascii_name=self.ascii_name,
-                alternate_names=self.alternate_names,
                 feature_class=self.feature_class,
                 feature_code=self.feature_code,
                 cc2=self.cc2,
