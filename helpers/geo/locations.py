@@ -31,6 +31,37 @@ class ResolvedLoc:
         self.usage_count = 0
         self.entities = []
 
+    def as_dict(self) -> Dict:
+        return dict(
+            geoname_id=self.geoname_id,
+            name=self.name,
+            latitude=self.latitude,
+            longitude=self.longitude,
+            country_code=self.country_code,
+            count=self.usage_count,
+            details=dict(
+                ascii_name=self.ascii_name,
+                alternate_names=self.alternate_names,
+                feature_class=self.feature_class,
+                feature_code=self.feature_code,
+                cc2=self.cc2,
+                admin1_code=self.admin1_code,
+                admin2_code=self.admin2_code,
+                admin3_code=self.admin3_code,
+                admin4_code=self.admin4_code,
+                population=self.population,
+                elevation=self.elevation,
+                dem=self.dem,
+                timezone=self.timezone,
+                modification_date=self.modification_date
+            ),
+            meta=dict(
+                exact_match=self.exact_match,
+                name_match=self.name_match,
+                alternate_name_match=self.alternate_name_match,
+            )
+        )
+
     def exact_match_to_admin1_code(self) -> bool:
         return self.name == self.admin1_code
 
@@ -55,8 +86,12 @@ class ResolvedLoc:
     def is_large_area(self) -> bool:
         return self.feature_class == 'L'
 
-    def add_entity(self, entity: Dict):
-        self.entities.append(entity.copy())
+    def add_entity_and_stage(self, entity: Dict, stage_name: str = None) -> None:
+        entity_info = {
+            "entity": entity.copy(),
+            "stage": stage_name or 'unknown',
+        }
+        self.entities.append(entity_info)
 
     def __repr__(self):
         return (

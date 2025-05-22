@@ -2,12 +2,12 @@ import csv
 import logging
 from .locations import ResolvedLoc
 from typing import Dict, List
-from . import INDEX_NAME
 
 logger = logging.getLogger(__name__)
 
 GEONAMES_URLS = "https://download.geonames.org/export/dump/allCountries.zip"
 RESULT_COUNT = 10
+INDEX_NAME = "news-geonames"
 
 
 def parse_all_countries_file(file_path, index_name):
@@ -133,3 +133,10 @@ def matching_places(index, entity: Dict) -> List[ResolvedLoc]:
             )
             candidates.append(candidate)
     return candidates
+
+
+def by_id(index, geoname_id: str) -> ResolvedLoc:
+    res = index.get(index=INDEX_NAME, id=geoname_id)
+    if res['found']:
+        return res["_source"]
+    return None

@@ -15,7 +15,7 @@ class TestResolver(TestCase):
         for c in country_tests[1:2]:
             entity_list = entities.from_text(c['text'], 'en')
             assert len(entity_list) > 0
-            resolved_places = resolver.resolve(entity_list)
+            resolved_places = resolver._resolve(entity_list)
             assert len(resolved_places) == 1
             assert resolved_places[0].is_country()
             assert resolved_places[0].country_code == c['expected']
@@ -24,7 +24,7 @@ class TestResolver(TestCase):
         article_text = "It is a lovely time of year to visit Europe, even though it can get crowded."
         entity_list = entities.from_text(article_text, 'en')
         assert len(entity_list) == 1
-        candidates = resolver.resolve(entity_list)
+        candidates = resolver._resolve(entity_list)
         assert len(candidates) == 1
         assert candidates[0].geoname_id == '6255148'
 
@@ -43,7 +43,7 @@ class TestResolver(TestCase):
             manually_coded = [row for row in reader]
         entity_list = entities.from_text(article_text, 'en')
         assert len(entity_list) > 0
-        resolved_locs = resolver.resolve(entity_list)
+        resolved_locs = resolver._resolve(entity_list)
         resolved_ids = [resolved_loc.geoname_id for resolved_loc in resolved_locs]
         assert len(manually_coded) == len(resolved_ids)
         for item in manually_coded:

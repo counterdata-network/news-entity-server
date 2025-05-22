@@ -2,11 +2,10 @@ import os
 import requests
 import zipfile
 import logging
-from elasticsearch import Elasticsearch
 
 from urllib.parse import urlparse
-from helpers.geo.geonames import GEONAMES_URLS
-from helpers.geo import INDEX_NAME, index_client
+from helpers.geo.geonames import GEONAMES_URLS, INDEX_NAME
+from helpers.geo import index_client
 from helpers.geo.index import create_elasticsearch_index, index_geonames_data
 
 logging.basicConfig(level=logging.INFO,

@@ -11,8 +11,6 @@ from helpers.exceptions import UnknownLanguageException
 from transformers import pipeline, AutoTokenizer, AutoModelForTokenClassification
 
 
-GEO_ENTITY_TYPES = ['GPE', 'NORP', 'LOC']
-
 _token_type_overrides = None
 
 def get_masakhaner_pipeline(hf_ner_model="Davlan/xlm-roberta-large-masakhaner"):

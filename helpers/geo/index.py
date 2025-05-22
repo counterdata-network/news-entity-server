@@ -1,4 +1,3 @@
-#from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 import logging
 
@@ -72,10 +71,6 @@ def create_elasticsearch_index(es_client, index_name):
 def index_geonames_data(es_client, index_name, file_path):
     logger.info(f"Indexing data from {file_path} into {index_name}")
 
-    # Count total lines for progress reporting
-    with open(file_path, 'r', encoding='utf-8') as f:
-        total_lines = sum(1 for _ in f)
-
     # Stream documents to Elasticsearch
     success, failed = bulk(
         es_client,
@@ -87,3 +82,4 @@ def index_geonames_data(es_client, index_name, file_path):
 
     logger.info(f"Indexing complete: {success} documents indexed, {len(failed)} failed")
     return success, failed
+

@@ -3,7 +3,7 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 from sentry_sdk.integrations.logging import ignore_logger
-from typing import Optional, Dict
+from typing import Optional
 from fastapi import FastAPI, Form
 import mcmetadata
 import uvicorn
@@ -12,6 +12,9 @@ import helpers
 import helpers.entities as entities
 from helpers.request import api_method
 from helpers.exceptions import UnknownLanguageException
+import helpers.geo as geo
+import helpers.geo.resolver as resolver
+import helpers.geo.geonames as geonames
 
 logger = logging.getLogger(__name__)
 
@@ -64,12 +67,24 @@ def supported_languages():
     return helpers.LANGUAGES
 
 
+@app.post("/content/from-url")
+@api_method
+def content_from_url(url: str = Form(..., description="A publicly accessible web url of a news story.")):
+    """
+    Return the content found at the URL. This uses a fallback mechanism to iterate through a list of 3rd party content
+    extractors. It will try each until it finds one that succeeds.
+    """
+    results = mcmetadata.extract(url)
+    return results
+
+
 @app.post("/entities/from-url")
 @api_method
 def entities_from_url(url: str = Form(..., description="A publicly accessible web url of a news story."),
-                      title: Optional[int] = Form(None, description="Optional 1 or 0 indicating if the title should be prefixed the content before checking for entities.",)):
+                      title: Optional[int] = Form(None, description="Optional 1 or 0 indicating if the title should be prefixed the content before checking for entities."),
+                      resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
-    Return all the entities found in content extracted from the URL.
+    Return all the entities found in content extracted from the URL. Will guess language from content.
     """
     article_info = mcmetadata.extract(url)
     include_title = title == 1 if title is not None else False
@@ -79,33 +94,8 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
     article_text += article_info['text_content']
     found_entities = entities.from_text(article_text, article_info['language'])
     results = article_info | dict(entities=found_entities)
-    results = _backwards_compatible_results(results)
-    del results['text']
-    return results
-
-
-@app.post("/content/from-url")
-@api_method
-def content_from_url(url: str = Form(..., description="A publicly accessible web url of a news story.")):
-    """
-    Return the content found at the URL. This uses a fallback mechanism to iterate through a list of 3rd party content
-    extractors. It will try each until it finds one that succeeds.
-    """
-    results = mcmetadata.extract(url)
-    results = _backwards_compatible_results(results)
-    # for backwards compatability
-    return results
-
-
-def _backwards_compatible_results(results: Dict) -> Dict:
-    results['text'] = results['text_content']
-    del results['text_content']
-    results['title'] = results['article_title']
-    del results['article_title']
-    results['url'] = results['original_url']
-    del results['original_url']
-    results['domain_name'] = results['canonical_domain']
-    del results['canonical_domain']
+    if resolve_geo:
+        results['geo'] = resolver.disambiguated_locations(found_entities)
     return results
 
 
@@ -113,15 +103,19 @@ def _backwards_compatible_results(results: Dict) -> Dict:
 @api_method
 def entities_from_content(text: str = Form(..., description="Raw text to check for entities."),
                           language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
-                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
+                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional)."),
+                          resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
     Return all the entities found in content passed in.
     """
+    found_entities = entities.from_text(text, language),
     results = dict(
-        entities=entities.from_text(text, language),
+        entities=found_entities,
         domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,
         url=url
     )
+    if resolve_geo:
+        results['geo'] = resolver.disambiguated_locations(found_entities)
     return results
 
 
@@ -129,16 +123,20 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
 @api_method
 def entities_from_html(html: str = Form(..., description="Raw HTML to check for entities."),
                        language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
-                       url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional).")):
+                       url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional)."),
+                       resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
     Return all the entities found in content from HTML passed in.
     """
     content = mcmetadata.content.from_html(url, html)
+    found_entities = entities.from_text(content['text'], language),
     results = dict(
-        entities=entities.from_text(content['text'], language),
+        entities=found_entities,
         domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,
         url=url
     )
+    if resolve_geo:
+        results['geo'] = resolver.disambiguated_locations(found_entities)
     return results
 
 
@@ -152,6 +150,16 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
         domain_name=mcmetadata.urls.canonical_domain(url),
         url=url,
     )
+    return results
+
+
+@app.post("/geonames/{geoname_id}")
+@api_method
+def geoname_by_id(geoname_id: str):
+    """
+    Reference helper to return all information for a given geoname_id.
+    """
+    results = geonames.by_id(geo.index_client(), geoname_id)
     return results
 
 

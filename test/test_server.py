@@ -190,6 +190,16 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
 
+    def test_geoname_by_id(self):
+        LONDON_GEONAME_ID = '2643743'
+        response = self._client.post('/geonames/by-id', data=dict(geoname_id=LONDON_GEONAME_ID, language=ENGLISH))
+        data = response.json()
+        assert data['status'] != 'error'
+        assert 'results' in data
+        assert len(data['results']) == 1
+        assert data['results']['name'] == 'London'
+        assert data['results']['geonameid'] == LONDON_GEONAME_ID
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -6,13 +6,23 @@ from .disambiguation import disambiguate
 from .geonames import matching_places
 from typing import Dict
 from .import index_client
-from helpers.entities import GEO_ENTITY_TYPES
+
+GEO_ENTITY_TYPES = ['GPE', 'NORP', 'LOC']
 
 _replacements = None
 
 
-def resolve(entities: List[Dict]) -> List[ResolvedLoc]:
-    geo_entities = geo_entities = [entity for entity in entities if entity['type'] in GEO_ENTITY_TYPES]
+def disambiguated_locations(entities: List[Dict]) -> List[Dict]:
+    """
+    Given a list of entities, return a list of disambiguated locations suitable for returning to a user.
+    """
+    resolved_locs = _resolve(entities)
+    simple_locs = [l.as_dict() for l in resolved_locs]
+    return simple_locs
+
+
+def _resolve(entities: List[Dict]) -> List[ResolvedLoc]:
+    geo_entities = [entity for entity in entities if entity['type'] in GEO_ENTITY_TYPES]
     if len(geo_entities) == 0:
         return []
 
