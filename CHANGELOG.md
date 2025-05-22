@@ -1,6 +1,12 @@
 Version History
 ===============
 
+### v3.0.0
+
+* Prototype integration of CLIFF-CLAVIN style geographic disambiguation (via Geonames.org place list database) 
+* Removed backwards-compatible results from `/entities/from-url` and `/content/from-url` enpoints
+* Updated dependencies (including bump to python 3.11)
+
 ### v2.5.1
 
 * Automated build tweaks for DockerHub release
