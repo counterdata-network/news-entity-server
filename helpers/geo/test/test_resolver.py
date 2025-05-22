@@ -63,9 +63,14 @@ class TestResolver(TestCase):
         assert 'ukrainian' in subs
         assert subs.get('ukrainian') == 'Ukraine'
 
+    def test_local_article(self):
+        self._test_manually_coded(
+            os.path.join(this_dir, 'fixtures', 'local_story.txt'),
+            os.path.join(this_dir, 'fixtures', 'local_story.csv')
+        )
 
 """
-    # doesn't work yet
+    # this does well, but doesn't work yet
     def test_mass_article(self):
         self._test_manually_coded(
             os.path.join(this_dir, 'fixtures', 'mass_article.txt'),
