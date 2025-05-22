@@ -82,7 +82,7 @@ def content_from_url(url: str = Form(..., description="A publicly accessible web
 @api_method
 def entities_from_url(url: str = Form(..., description="A publicly accessible web url of a news story."),
                       title: Optional[int] = Form(None, description="Optional 1 or 0 indicating if the title should be prefixed the content before checking for entities."),
-                      resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
+                      resolve_geo: Optional[bool] = Form(False, description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
     Return all the entities found in content extracted from the URL. Will guess language from content.
     """
@@ -103,12 +103,12 @@ def entities_from_url(url: str = Form(..., description="A publicly accessible we
 @api_method
 def entities_from_content(text: str = Form(..., description="Raw text to check for entities."),
                           language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
-                          url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional)."),
-                          resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
+                          url: Optional[str] = Form(None, description="Helpful for some metadata if you pass in the original URL (optional)."),
+                          resolve_geo: Optional[bool] = Form(False, description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
     Return all the entities found in content passed in.
     """
-    found_entities = entities.from_text(text, language),
+    found_entities = entities.from_text(text, language)
     results = dict(
         entities=found_entities,
         domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,
@@ -124,7 +124,7 @@ def entities_from_content(text: str = Form(..., description="Raw text to check f
 def entities_from_html(html: str = Form(..., description="Raw HTML to check for entities."),
                        language: str = Form(..., description="One of the supported two-letter language codes.", length=2),
                        url: Optional[str] = Form(..., description="Helpful for some metadata if you pass in the original URL (optional)."),
-                       resolve_geo: Optional[bool] = Form(..., description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
+                       resolve_geo: Optional[bool] = Form(False, description="If true, will return resolved disambiguated geolocation information for the geo entities found.")):
     """
     Return all the entities found in content from HTML passed in.
     """
