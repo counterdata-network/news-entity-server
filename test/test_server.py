@@ -3,7 +3,6 @@ import time
 
 import mcmetadata.content
 from fastapi.testclient import TestClient
-from httpx import Timeout
 import os
 import json
 
@@ -12,6 +11,7 @@ from helpers import ENGLISH, SPANISH, VERSION, FRENCH, KOREAN, SWAHILI, MODEL_MO
 
 
 ENGLISH_ARTICLE_URL = 'https://web.archive.org/web/20240329152732/https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
+ORIGINAL_ENGLISH_ARTICLE_URL = 'https://apnews.com/article/belgium-racing-pigeon-fetches-million-9ae40c9f2e9e11699c42694250e012f7'
 SPANISH_ARTICLE_URL = 'https://web.archive.org/web/20220809180347/https://elpais.com/economia/2020-12-03/la-salida-de-trump-zanja-una-era-de-unilateralismo-y-augura-un-cambio-de-paradigma-en-los-organismos-economicos-globales.html'
 SWAHILI_ARTICLE_URL = 'https://web.archive.org/web/20250319080640/https://kiswahili.tuko.co.ke/watu/582633-sabina-chege-adai-kunyongwa-kwa-margaret-nduta-kumekwama-baada-ya-serikali-kuingilia-kati/'
 
@@ -115,19 +115,6 @@ class TestServer(unittest.TestCase):
         assert data['results']['entities'][0]['text'] == 'Sabina Chege'
         assert data['results']['entities'][0]['type'] == 'PER'
 
-    def test_entities_from_url_swahili(self):
-        response = self._client.post(
-            '/entities/from-url', 
-            data=dict(url=SWAHILI_ARTICLE_URL, language=SWAHILI),
-            )
-        data = response.json()
-        assert 'results' in data
-        assert 'entities' in data['results']
-        assert 'modelMode' in data
-        assert len(data['results']['entities']) == 37
-        assert data['results']['entities'][0]['text'] == 'Sabina Chege'
-        assert data['results']['entities'][0]['type'] == 'PER'
-
     def test_entities_from_url_french(self):
         url = "https://web.archive.org/web/20220407064224/https://www.letelegramme.fr/soir/alain-souchon-j-ai-un-modele-mick-jagger-05-11-2021-12861556.php"
         response = self._client.post('/entities/from-url', data=dict(url=url, language=FRENCH))
@@ -145,19 +132,19 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
-        assert data['results']['url'] == ENGLISH_ARTICLE_URL
-        assert 'domain_name' in data['results']
-        assert data['results']['domain_name'] == 'apnews.com'
+        assert data['results']['url'] == ORIGINAL_ENGLISH_ARTICLE_URL
+        assert 'canonical_domain' in data['results']
+        assert data['results']['canonical_domain'] == 'apnews.com'
 
     def test_content_from_url(self):
         response = self._client.post('/content/from-url', data=dict(url=ENGLISH_ARTICLE_URL))
         data = response.json()
         assert 'results' in data
         assert 'url' in data['results']
-        assert 'domain_name' in data['results']
-        assert data['results']['url'] == ENGLISH_ARTICLE_URL
-        assert 'text' in data['results']
-        assert len(data['results']['text']) > 0
+        assert data['results']['url'] == ORIGINAL_ENGLISH_ARTICLE_URL
+        assert 'canonical_domain' in data['results']
+        assert 'text_content' in data['results']
+        assert len(data['results']['text_content']) > 0
 
     def test_entities_from_text(self):
         story = json.load(open(os.path.join(this_dir, 'fixtures', '1952688847.json')))
@@ -190,13 +177,13 @@ class TestServer(unittest.TestCase):
         data = response.json()
         assert 'results' in data
 
+    @unittest.skipUnless(os.environ.get('ES_SERVER'), "ES_SERVER environment variable not set")
     def test_geoname_by_id(self):
         LONDON_GEONAME_ID = '2643743'
-        response = self._client.post('/geonames/by-id', data=dict(geoname_id=LONDON_GEONAME_ID, language=ENGLISH))
+        response = self._client.post(f"/geonames/{LONDON_GEONAME_ID}")
         data = response.json()
         assert data['status'] != 'error'
         assert 'results' in data
-        assert len(data['results']) == 1
         assert data['results']['name'] == 'London'
         assert data['results']['geonameid'] == LONDON_GEONAME_ID
 

@@ -129,7 +129,7 @@ def entities_from_html(html: str = Form(..., description="Raw HTML to check for 
     Return all the entities found in content from HTML passed in.
     """
     content = mcmetadata.content.from_html(url, html)
-    found_entities = entities.from_text(content['text'], language),
+    found_entities = entities.from_text(content['text'], language)
     results = dict(
         entities=found_entities,
         domain_name=mcmetadata.urls.canonical_domain(url) if url is not None else None,

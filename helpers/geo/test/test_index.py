@@ -4,8 +4,9 @@ import time
 from . import ALL_COUNTRIES_FIXTURE_PATH
 from ..index import create_elasticsearch_index, index_geonames_data
 import os
+from . import skip_if_no_es_server
 
-
+@skip_if_no_es_server
 class IndexInitTest(TestCase):
 
     INDEX_NAME = "test_geonames"

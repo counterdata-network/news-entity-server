@@ -4,10 +4,11 @@ import json
 import csv
 import helpers.entities as entities
 import helpers.geo.resolver as resolver
+from . import skip_if_no_es_server
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
-
+@skip_if_no_es_server
 class TestResolver(TestCase):
 
     def test_simple_countries(self):

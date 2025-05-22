@@ -1,14 +1,14 @@
 requests  # let various other dependencies sort of the right version of this
-python-dotenv==1.0.*
+python-dotenv==1.1.*
 spacy==3.8.*
 pytest==8.*
-sentry-sdk==2.26.*
+sentry-sdk==2.29.*
 fastapi[all]==0.115.*
 uvicorn[standard]  # let pip figure out the right version based on fastapi
 gunicorn==23.0.*
-mediacloud-metadata==1.3.*
-transformers==4.51.*
-protobuf==6.30.*
+mediacloud-metadata==1.4.*
+transformers==4.52.*
+protobuf==6.31.*
 torch==2.7.*
 sentencepiece==0.2.0
 elasticsearch==9.0.*

@@ -4,8 +4,9 @@ from ..geonames import parse_all_countries_file, matching_places, by_id
 from ..locations import ResolvedLoc
 from .. import index_client
 from ..geonames import INDEX_NAME
+from . import skip_if_no_es_server
 
-
+@skip_if_no_es_server
 class GeonamesTest(TestCase):
 
     def setUp(self):
