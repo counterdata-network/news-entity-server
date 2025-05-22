@@ -167,10 +167,10 @@ def _add_or_increment(entity: Dict, picked_loc: ResolvedLoc, all_resolved: List[
     for loc in all_resolved:
         if loc.geoname_id == picked_loc.geoname_id:
             loc.usage_count += 1
-            loc.add_entity_and_stage(entity)
+            loc.add_entity_and_stage(entity, stage_name)
             return
     picked_loc.usage_count += 1
-    picked_loc.add_entity_and_stage(entity)
+    picked_loc.add_entity_and_stage(entity, stage_name)
     all_resolved.append(picked_loc)
 
 
