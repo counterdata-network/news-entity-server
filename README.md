@@ -8,6 +8,8 @@ A small API server to return entities and other metadata for online news article
 [Data Against Feminicide](https://datoscontrafeminicidio.net/) project. Technically, this exposes
 API endpoints that accepts URLs and returns entities in JSON. Uses spaCy under the hood for entity extraction.
 
+Installing
+----------
 
 **Install from Docker**: The easiest approach to just start using this is to [install the pre-built image from 
 DockerHub](https://hub.docker.com/r/rahulbot/news-entity-server). Set a `WEB_CONCURRENCY` env var if you want more than one worker.
@@ -16,6 +18,12 @@ DockerHub](https://hub.docker.com/r/rahulbot/news-entity-server). Set a `WEB_CON
 docker pull rahulbot/news-entity-server:latest
 docker run -p 8000:8000 -e MODEL_MODE=small -m 8G news-entity-server:latest
 ```
+
+If you want to support the optional geographic disambiguation, you also need to:
+
+1. set up an Elasticsearch install
+2. point the container at it via the `ES_SERVER` env-var
+3. run the one-time database initialization script to import the geonames list of places (inside your container once the env-var is set): `python -m scripts/init_db`
 
 Developing
 ----------
@@ -69,16 +77,31 @@ Every endpoint returns a dict like this:
 
 #### /entities/from-url
 
-POST a `url` and `language` to this endpoint and it returns JSON with all the entities it finds. 
+POST a `url` to this endpoint and it returns JSON with all the entities it finds. 
 Add a `title` argument, set to 1 or 0, to optionally include the article title in the entity extraction.  
+If you have the Elasticsearch index initialized, add a `resolve_geo` argument to get geographic disambiguation for the entities.
 
 #### /entities/from-content
 
 POST `text` and `language` content to this endpoint, and it returns JSON with all the entities it finds.
+If you have the Elasticsearch index initialized, add a `resolve_geo` argument to get geographic disambiguation for the entities.
+
+#### /entities/from-content
+
+POST `html`, `url`, and `language` content to this endpoint, and it returns JSON with all the entities it finds.
+If you have the Elasticsearch index initialized, add a `resolve_geo` argument to get geographic disambiguation for the entities.
 
 #### /content/from-url
 
 POST a `url` to this endpoint, and it returns just the extracted content from the HTML.
+
+#### /domains/from-url
+
+Post a full `url` to this and get back the `canonical_domain` value, which can be useful for grouping by media source.
+
+#### /geonames/[id]
+
+GET from this URL and (if you have the Elasticsearch index initialized) you can lookup a place by Geonames id.
 
 
 Releasing to DockerHub
