@@ -1,5 +1,6 @@
 # using alpine as base for smaller image size
-FROM python:3.13
+# freeze at 3.12 so sentencepiece installs from prebuilt wheel file
+FROM python:3.12
 
 # move options to try and reduce image size
 ENV \
