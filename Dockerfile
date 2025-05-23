@@ -1,5 +1,5 @@
 # using alpine as base for smaller image size
-FROM python:3.10
+FROM python:3.13
 
 # move options to try and reduce image size
 ENV \
