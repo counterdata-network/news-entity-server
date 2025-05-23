@@ -153,7 +153,7 @@ def domain_from_url(url: str = Form(..., description="A publicly accessible web 
     return results
 
 
-@app.post("/geonames/{geoname_id}")
+@app.get("/geonames/{geoname_id}")
 @api_method
 def geoname_by_id(geoname_id: str):
     """

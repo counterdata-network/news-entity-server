@@ -180,7 +180,7 @@ class TestServer(unittest.TestCase):
     @unittest.skipUnless(os.environ.get('ES_SERVER'), "ES_SERVER environment variable not set")
     def test_geoname_by_id(self):
         LONDON_GEONAME_ID = '2643743'
-        response = self._client.post(f"/geonames/{LONDON_GEONAME_ID}")
+        response = self._client.get(f"/geonames/{LONDON_GEONAME_ID}")
         data = response.json()
         assert data['status'] != 'error'
         assert 'results' in data
